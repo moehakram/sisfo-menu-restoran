@@ -152,4 +152,15 @@ class OrderRepository
         $stmt->bindParam(':orderId', $orderId);
         $stmt->execute();
     }
+
+    public function hasOrderedBefore($userId)
+    {
+        $sql = "SELECT COUNT(*) FROM tbl_order_213049 WHERE `213049_idpengunjung` = :userId AND `213049_idstatus` = 2";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute([':userId' => $userId]);
+        $result = $statement->fetchColumn();
+
+        return $result > 0;
+    }
+    
 }
