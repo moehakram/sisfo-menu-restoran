@@ -1,0 +1,17 @@
+{
+    "test":{
+        "host" : "localhost",
+        "port" : "3306",
+        "dbname" : "sisfo_menurestoran",
+        "dbuser" : "root",
+        "dbpass" : ""
+    },
+    
+    "prod":{
+        "host" : "localhost",
+        "port" : "3306",
+        "dbname" : "sisfo_menurestoran",
+        "dbuser" : "root",
+        "dbpass" : ""
+    }
+}
