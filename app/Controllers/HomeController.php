@@ -10,8 +10,8 @@ class HomeController extends Controller {
     public function index() {
         if($this->user == null){
             $menuRepository = new MenuRepository(Database::getConnection());
-            $dataMakanan = $menuRepository->getMenuByJenis('Makanan');
-            $dataMinuman = $menuRepository->getMenuByJenis('Minuman');
+            $dataMakanan = $menuRepository->getByJenis('Makanan');
+            $dataMinuman = $menuRepository->getByJenis('Minuman');
             $view = View::renderViewOnly('index', [
                 "title" => "Login Management",
                 "makanan" => $dataMakanan,

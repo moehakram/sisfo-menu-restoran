@@ -32,10 +32,10 @@ $router->post("/entri-order/getdata", "EntriOrderController@getData", [MustLogin
 $router->post("/entri-order/checkout", "EntriOrderController@postCheckout", [MustLoginMiddleware::class, Role::ADMIN]);
 $router->get("/entri-order/checkout", "EntriOrderController@checkout", [MustLoginMiddleware::class, Role::ADMIN]);
 
-$router->get("/home", "PesanController@index", [MustLoginMiddleware::class]);
+$router->get("/home", "CustomerController@index", [MustLoginMiddleware::class]);
+$router->get("/pesan-menu", "CustomerController@index", [MustLoginMiddleware::class]);
 $router->get("/pesan-meja", "ReservasiController@pesanMeja", [MustLoginMiddleware::class]);
 $router->post("/pesan-meja", "ReservasiController@bookingMeja", [MustLoginMiddleware::class]);
-$router->get("/pesan-menu", "PesananController@pesanMenu", [MustLoginMiddleware::class]);
 $router->post("/getdata", "PesanController@getData", [MustLoginMiddleware::class]);
 $router->post("/checkout", "ReservasiController@postCheckout", [MustLoginMiddleware::class]);
 $router->get("/checkout", "ReservasiController@checkout", [MustLoginMiddleware::class]);

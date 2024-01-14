@@ -22,32 +22,34 @@ class PesananService
         $this->pesananRepository = new PesananRepositori($connection);
     }
 
-    public function create(UserDataOrderRequest $data): Order
+    public function create(UserDataOrderRequest $orderan, UserDataPesananRequest $pesananList): Order
     {
         $order = new Order();
-        $order->idAdmin = $data->userId;
-        $order->idPengunjung = $data->userId;
+        $order->idAdmin = $orderan->userId;
+        $order->idPengunjung = $orderan->userId;
         $order->waktuPesan = date("Y-m-d H:i:s");
-        $order->noMeja = $data->no_meja;
-        $order->totalHarga = $data->total_harga;
-        $order->uangBayar = $data->uangBayar;
-        $order->uangKembali = $data->uangKembali;
-        $order->idStatus = $data->idStatus;
-        $order->namaAdmin = $data->namaAdmin;
-        $order->namaPengunjung = $data->namaPengunjung;
+        $order->noMeja = $orderan->no_meja;
+        $order->totalHarga = $orderan->total_harga;
+        $order->uangBayar = $orderan->uangBayar;
+        $order->uangKembali = $orderan->uangKembali;
+        $order->idStatus = $orderan->idStatus;
+        $order->namaAdmin = $orderan->namaAdmin;
+        $order->namaPengunjung = $orderan->namaPengunjung;
+        $orderanku = $this->orderRepository->save($order);     
 
-        $this->orderRepository->save($order);
-        return $order;
+        $this->pesananService = new PesananService();
+        foreach ($pesananList as $data) {
+            $pesanan = new Pesanan();
+            $pesanan->idOreder = $orderanku->id;
+            $pesanan->jumlah = $data->jumlah;
+            $pesanan->idStatus = $data->idStatus;
+            $pesanan->idMenu = $data->idMenu;
+            $pesanan->subtotal = $data->subtotal;
+            $pesanan->menuNama = $data->menuNama;
+            $pesanan->menuHarga = $data->menuHarga;
+
+            $this->pesananRepository->save($pesanan);
+        }
     }
 
-
-    public function hasOrderedBefore($userId)
-    {
-        $sql = "SELECT COUNT(*) FROM tbl_order_213049 WHERE `213049_idpengunjung` = :userId AND `213049_idstatus` = 2";
-        $statement = $this->connection->prepare($sql);
-        $statement->execute([':userId' => $userId]);
-        $result = $statement->fetchColumn();
-
-        return $result > 0;
-    }
 }
