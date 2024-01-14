@@ -46,24 +46,25 @@ class MejaRepository
         return $mejaList;
     }
 
-    public function getByNo(int $noMeja): ?Meja
+    public function getByStatus(int $status = 1)
     {
-        $query = "SELECT 213049_no_meja, 213049_status_meja FROM tbl_meja_213049 WHERE 213049_no_meja = :noMeja";
+        $query = "SELECT 213049_no_meja, 213049_status_meja FROM tbl_meja_213049 WHERE 213049_status_meja = :status";
         $stmt = $this->connection->prepare($query);
-
-        $stmt->execute([':noMeja'=>$noMeja]);
+        $stmt->execute([':status'=>$status]);
+        
+        $mejaDataList = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     
-        $mejaData = $stmt->fetch(\PDO::FETCH_ASSOC);
         try {
-            if ($mejaData) {
-                $meja = new Meja();
-                $meja->nomor = $mejaData['213049_no_meja'];
-                $meja->status = $mejaData['213049_status_meja'];
-                
-                return $meja;
-            } else {
-                return null;
-            }
+                $mejaList = [];
+                foreach ($mejaDataList as $mejaData) {
+                    $meja = new Meja();
+                    $meja->nomor = $mejaData['213049_no_meja'];
+                    $meja->status = $mejaData['213049_status_meja'];
+            
+                    $mejaList[] = $meja;
+                }
+                return $mejaList;
+
         } finally {
             $stmt->closeCursor();
         }

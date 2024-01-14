@@ -3,7 +3,13 @@
 use App\Middleware\{MustLoginMiddleware, MustNotLoginMiddleware, Role};
 
 
-$router->get('/', 'HomeController@index');
+$router->get('/', 'CustomerController@index');
+$router->get("/home", "CustomerController@home", [MustLoginMiddleware::class]);
+$router->get("/pesan-menu", "CustomerController@pesanMenu", [MustLoginMiddleware::class]);
+$router->post("/getdata", "CustomerController@getMenu", [MustLoginMiddleware::class]);
+$router->post("/checkout", "CustomerController@postCheckout", [MustLoginMiddleware::class]);
+$router->get("/checkout", "CustomerController@checkout", [MustLoginMiddleware::class]);
+$router->get("/getTableNumbers", "CustomerController@getMeja", [MustLoginMiddleware::class]);
 
 // $router->get('/dashboard', 'HomeController@dashboard', [MustLoginMiddleware::class, Role::ADMIN]);
 
@@ -31,15 +37,6 @@ $router->get("/entri-order", "EntriOrderController@index", [MustLoginMiddleware:
 $router->post("/entri-order/getdata", "EntriOrderController@getData", [MustLoginMiddleware::class, Role::ADMIN]);
 $router->post("/entri-order/checkout", "EntriOrderController@postCheckout", [MustLoginMiddleware::class, Role::ADMIN]);
 $router->get("/entri-order/checkout", "EntriOrderController@checkout", [MustLoginMiddleware::class, Role::ADMIN]);
-
-$router->get("/home", "CustomerController@index", [MustLoginMiddleware::class]);
-$router->get("/pesan-menu", "CustomerController@index", [MustLoginMiddleware::class]);
-$router->get("/pesan-meja", "ReservasiController@pesanMeja", [MustLoginMiddleware::class]);
-$router->post("/pesan-meja", "ReservasiController@bookingMeja", [MustLoginMiddleware::class]);
-$router->post("/getdata", "PesanController@getData", [MustLoginMiddleware::class]);
-$router->post("/checkout", "ReservasiController@postCheckout", [MustLoginMiddleware::class]);
-$router->get("/checkout", "ReservasiController@checkout", [MustLoginMiddleware::class]);
-$router->get("/getTableNumbers", "PesananController@meja", [MustLoginMiddleware::class]);
 
 $router->get("/entri-pegawai", "EntriPegawaiController@index", [MustLoginMiddleware::class, Role::ADMIN]);
 $router->post("/entri-pegawai/tambah", "EntriPegawaiController@tambahPegawai", [MustLoginMiddleware::class, Role::ADMIN]);

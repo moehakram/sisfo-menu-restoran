@@ -2,13 +2,14 @@
 
 namespace App\Service;
 
+use App\Core\Database\Database;
 use App\Domain\Menu;
 use App\Repository\OrderRepository;
 use App\Repository\PesananRepository;
 use App\Models\UserDataOrderRequest;
 use App\Models\UserDataPesanRequest;
+use App\Models\UserDataOrderResponse;
 
-use App\Core\Database\Database;
 
 class PesananService
 {
@@ -22,12 +23,12 @@ class PesananService
         $this->pesananRepository = new PesananRepositori($connection);
     }
 
-    public function create(UserDataOrderRequest $orderan, UserDataPesananRequest $pesananList): Order
+    public function create(UserDataOrderRequest $orderan, UserDataPesananRequest $pesananList): UserDataOrderResponse
     {
         $order = new Order();
         $order->idAdmin = $orderan->userId;
         $order->idPengunjung = $orderan->userId;
-        $order->waktuPesan = date("Y-m-d H:i:s");
+        $order->waktuPesan = $orderan->waktuPesan;
         $order->noMeja = $orderan->no_meja;
         $order->totalHarga = $orderan->total_harga;
         $order->uangBayar = $orderan->uangBayar;
@@ -35,7 +36,7 @@ class PesananService
         $order->idStatus = $orderan->idStatus;
         $order->namaAdmin = $orderan->namaAdmin;
         $order->namaPengunjung = $orderan->namaPengunjung;
-        $orderanku = $this->orderRepository->save($order);     
+        $orderanku = $this->orderRepository->save($order);
 
         $this->pesananService = new PesananService();
         foreach ($pesananList as $data) {
@@ -47,7 +48,6 @@ class PesananService
             $pesanan->subtotal = $data->subtotal;
             $pesanan->menuNama = $data->menuNama;
             $pesanan->menuHarga = $data->menuHarga;
-
             $this->pesananRepository->save($pesanan);
         }
     }

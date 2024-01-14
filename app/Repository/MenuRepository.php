@@ -60,7 +60,7 @@ class MenuRepository
     {
         $query = "SELECT 213049_id, 213049_menu_nama, 213049_menu_jenis, 213049_menu_harga, 213049_menu_stok, 213049_idstatus, 213049_menu_gambar FROM tbl_menu_213049 WHERE 213049_id = :menuId";
         $stmt = $this->connection->prepare($query);
-        $stmt->execute([':menuId', $menuId]);
+        $stmt->execute([':menuId' => $menuId]);
     
         $menuData = $stmt->fetch(\PDO::FETCH_ASSOC);
         try{

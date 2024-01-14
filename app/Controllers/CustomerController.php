@@ -11,13 +11,40 @@ use App\Domain\Menu;
 class CustomerController extends Controller{
 
     public function index() {
+        if($this->user == null){
+            $menuRepository = new MenuRepository(Database::getConnection());
+            $dataMakanan = $menuRepository->getByJenis('Makanan');
+            $dataMinuman = $menuRepository->getByJenis('Minuman');
+            $view = View::renderViewOnly('index', [
+                "title" => "Login Management",
+                "makanan" => $dataMakanan,
+                "minuman" => $dataMinuman
+            ]);
+            $this->response->setContent($view);
+        }else{
+            if($this->user->level !== 1) $this->response->redirect('/home');
+            
+            $view = View::renderView('admin/dashboard', [
+                "title" => "Dashboard",
+                "user" => [
+                    "name" => $this->user->name
+                ],
+                "jumlahMenu" => 27,
+                "jumlahOrder" => 50,
+                "pemasukan" => 20
+            ]);
+            $this->response->setContent($view);
+        }
+    }
+
+    public function home($view = 'index') {
         
         $menuRepository = new MenuRepository(Database::getConnection());
 
         $dataMakanan = $menuRepository->getByJenis('Makanan');
         $dataMinuman = $menuRepository->getByJenis('Minuman');
-        $html = View::renderView('pelanggan/index', [
-            "title" => "Entri Order",
+        $html = View::renderView("pelanggan/$view", [
+            "title" => "Restoran FOOD-HUNT",
             "user" => [
                 "name" => $this->user->name
             ],
@@ -28,16 +55,21 @@ class CustomerController extends Controller{
         $this->response->setContent($html);
     }
 
-    public function getData()
+    public function pesanMenu(){
+        $this->home('pesan-menu');
+    }
+
+    public function getMenu()
     {
-        $model = $this->menuRepository->getById($this->request->post('id'));
-        $this->response->setContent(json_encode($model));
+        $menuRepository = new MenuRepository(Database::getConnection());
+        $dataMenu = $menuRepository->getById($this->request->post('id'));
+        $this->response->setContent(json_encode($dataMenu));
     }
     
-    public function meja()
+    public function getMeja()
     {
-        $model = (new MejaRepository(Database::getConnection()))->getAll();
-        $this->response->setContent(json_encode($model));
+        $dataMeja = (new MejaRepository(Database::getConnection()))->getByStatus();
+        $this->response->setContent(json_encode($dataMeja));
     }
     
     public function postCheckout() {
