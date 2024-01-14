@@ -14,7 +14,7 @@ class StatusRepository
     }
 
     // Fungsi untuk menambahkan status baru
-    public function addStatus(Status $status): Status
+    public function save(Status $status): Status
     {
         $query = "INSERT INTO tbl_status_213049 
                   (213049_status_user, 213049_status_pesan, 213049_status_order, 
@@ -23,12 +23,13 @@ class StatusRepository
                           :statusMenu, :statusMeja)";
         
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':statusUser', $status->statusUser);
-        $stmt->bindParam(':statusPesan', $status->statusPesan);
-        $stmt->bindParam(':statusOrder', $status->statusOrder);
-        $stmt->bindParam(':statusMenu', $status->statusMenu);
-        $stmt->bindParam(':statusMeja', $status->statusMeja);
-        $stmt->execute();
+        $stmt->execute([
+            ':statusUser' => $status->statusUser,
+            ':statusPesan' => $status->statusPesan,
+            ':statusOrder' => $status->statusOrder,
+            ':statusMenu' => $status->statusMenu,
+            ':statusMeja' => $status->statusMeja
+        ]);
     
         $status->id = $this->connection->lastInsertId();
 
@@ -36,7 +37,7 @@ class StatusRepository
     }
 
     // Fungsi untuk mendapatkan daftar semua status
-    public function getAllStatuses()
+    public function getAll()
     {
         $query = "SELECT 213049_id, 213049_status_user, 213049_status_pesan, 
                           213049_status_order, 213049_status_menu, 213049_status_meja 
@@ -61,14 +62,13 @@ class StatusRepository
     }
 
     // Fungsi untuk mendapatkan detail status berdasarkan ID
-    public function getStatusById(int $statusId): ?Status
+    public function getById(int $statusId): ?Status
     {
         $query = "SELECT 213049_id, 213049_status_user, 213049_status_pesan, 
                           213049_status_order, 213049_status_menu, 213049_status_meja 
                   FROM tbl_status_213049 WHERE 213049_id = :statusId";
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':statusId', $statusId);
-        $stmt->execute();
+        $stmt->execute([':statusId' => $statusId]);
     
         $statusData = $stmt->fetch(\PDO::FETCH_ASSOC);
         try {
@@ -91,7 +91,7 @@ class StatusRepository
     }
 
     // Fungsi untuk mengupdate status berdasarkan ID
-    public function updateStatus(Status $status): Status
+    public function update(Status $status): Status
     {
         $query = "UPDATE tbl_status_213049 
                   SET 213049_status_user = :statusUser, 213049_status_pesan = :statusPesan, 
@@ -100,23 +100,25 @@ class StatusRepository
                   WHERE 213049_id = :statusId";
         
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':statusId', $status->id);
-        $stmt->bindParam(':statusUser', $status->statusUser);
-        $stmt->bindParam(':statusPesan', $status->statusPesan);
-        $stmt->bindParam(':statusOrder', $status->statusOrder);
-        $stmt->bindParam(':statusMenu', $status->statusMenu);
-        $stmt->bindParam(':statusMeja', $status->statusMeja);
-        $stmt->execute();
+        $stmt->execute([
+            ':statusId' => $status->id,
+            ':statusUser' => $status->statusUser,
+            ':statusPesan' => $status->statusPesan,
+            ':statusOrder' => $status->statusOrder,
+            ':statusMenu' => $status->statusMenu,
+            ':statusMeja' => $status->statusMeja
+        ]);
         
         return $status;
     }
 
     // Fungsi untuk menghapus status berdasarkan ID
-    public function deleteStatus(int $statusId): void
+    public function delete(int $statusId): void
     {
         $query = "DELETE FROM tbl_status_213049 WHERE 213049_id = :statusId";
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':statusId', $statusId);
-        $stmt->execute();
+        $stmt->execute([
+            ':statusId' => $statusId
+        ]);
     }
 }

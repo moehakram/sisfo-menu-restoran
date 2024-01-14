@@ -27,17 +27,19 @@ class OrderRepository
                           :namaPengunjung)";
         
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':idAdmin', $order->idAdmin);
-        $stmt->bindParam(':idPengunjung', $order->idPengunjung);
-        $stmt->bindParam(':waktuPesan', $order->waktuPesan);
-        $stmt->bindParam(':noMeja', $order->noMeja);
-        $stmt->bindParam(':totalHarga', $order->totalHarga);
-        $stmt->bindParam(':uangBayar', $order->uangBayar);
-        $stmt->bindParam(':uangKembali', $order->uangKembali);
-        $stmt->bindParam(':idStatus', $order->idStatus);
-        $stmt->bindParam(':namaAdmin', $order->namaAdmin);
-        $stmt->bindParam(':namaPengunjung', $order->namaPengunjung);
-        $stmt->execute();
+        $stmt->execute([
+            ':idAdmin' => $order->idAdmin,
+            ':idPengunjung' => $order->idPengunjung,
+            ':waktuPesan' => $order->waktuPesan,
+            ':noMeja' => $order->noMeja,
+            ':totalHarga' => $order->totalHarga,
+            ':uangBayar' => $order->uangBayar,
+            ':uangKembali' => $order->uangKembali,
+            ':idStatus' => $order->idStatus,
+            ':namaAdmin' => $order->namaAdmin,
+            ':namaPengunjung' => $order->namaPengunjung
+        ]);
+        
     
         $order->id = $this->connection->lastInsertId();
 
@@ -45,7 +47,7 @@ class OrderRepository
     }
 
     // Fungsi untuk mendapatkan daftar semua order
-    public function getAllOrders()
+    public function getAll()
     {
         $query = "SELECT 213049_id, 213049_idadmin, 213049_idpengunjung, 
                           213049_waktu_pesan, 213049_no_meja, 213049_total_harga, 
@@ -77,7 +79,7 @@ class OrderRepository
     }
 
     // Fungsi untuk mendapatkan detail order berdasarkan ID
-    public function getOrderById(int $orderId): ?Order
+    public function getById(int $orderId): ?Order
     {
         $query = "SELECT 213049_id, 213049_idadmin, 213049_idpengunjung, 
                           213049_waktu_pesan, 213049_no_meja, 213049_total_harga, 
@@ -125,18 +127,19 @@ class OrderRepository
                   WHERE 213049_id = :orderId";
         
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':orderId', $order->id);
-        $stmt->bindParam(':idAdmin', $order->idAdmin);
-        $stmt->bindParam(':idPengunjung', $order->idPengunjung);
-        $stmt->bindParam(':waktuPesan', $order->waktuPesan);
-        $stmt->bindParam(':noMeja', $order->noMeja);
-        $stmt->bindParam(':totalHarga', $order->totalHarga);
-        $stmt->bindParam(':uangBayar', $order->uangBayar);
-        $stmt->bindParam(':uangKembali', $order->uangKembali);
-        $stmt->bindParam(':idStatus', $order->idStatus);
-        $stmt->bindParam(':namaAdmin', $order->namaAdmin);
-        $stmt->bindParam(':namaPengunjung', $order->namaPengunjung);
-        $stmt->execute();
+        $stmt->execute([
+            ':orderId' => $order->id,
+            ':idAdmin' => $order->idAdmin,
+            ':idPengunjung' => $order->idPengunjung,
+            ':waktuPesan' => $order->waktuPesan,
+            ':noMeja' => $order->noMeja,
+            ':totalHarga' => $order->totalHarga,
+            ':uangBayar' => $order->uangBayar,
+            ':uangKembali' => $order->uangKembali,
+            ':idStatus' => $order->idStatus,
+            ':namaAdmin' => $order->namaAdmin,
+            ':namaPengunjung' => $order->namaPengunjung
+        ]);
         
         return $order;
     }

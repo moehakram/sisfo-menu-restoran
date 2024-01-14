@@ -12,7 +12,6 @@ class MenuRepository
         $this->connection = $connection;
     }
 
-    // Fungsi untuk menambahkan menu baru
     public function save(Menu $menu): Menu
     {
         $query = "INSERT INTO tbl_menu_213049 
@@ -20,22 +19,21 @@ class MenuRepository
                   VALUES (:menuNama, :menuJenis, :menuHarga, :menuStok, :idStatus, :menuGambar)";
         
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':menuNama', $menu->nama());
-        $stmt->bindParam(':menuJenis', $menu->jenis());
-        $stmt->bindParam(':menuHarga', $menu->harga());
-        $stmt->bindParam(':menuStok', $menu->stok());
-        $stmt->bindParam(':idStatus', $menu->status());
-        $stmt->bindParam(':menuGambar', $menu->gambar());
-        $stmt->execute();
+        $stmt->execute([
+            ':menuNama' => $menu->nama,
+            ':menuJenis' => $menu->jenis,
+            ':menuHarga' => $menu->harga,
+            ':menuStok' => $menu->stok,
+            ':idStatus' => $menu->status,
+            ':menuGambar' => $menu->gambar
+        ]);
     
         $menu->id = $this->connection->lastInsertId();
 
         return $menu;
     }
     
-
-    // Fungsi untuk mendapatkan daftar semua menu
-    public function getAllMenus()
+    public function getAll()
     {
         $query = "SELECT 213049_id, 213049_menu_nama, 213049_menu_jenis, 213049_menu_harga, 213049_menu_stok, 213049_idstatus, 213049_menu_gambar FROM tbl_menu_213049";
         $stmt = $this->connection->query($query);
@@ -58,14 +56,11 @@ class MenuRepository
         return $menuList;
     }
     
-
-    // Fungsi untuk mendapatkan detail menu berdasarkan ID
-    public function getMenuById(int $menuId): ?Menu
+    public function getById(int $menuId): ?Menu
     {
         $query = "SELECT 213049_id, 213049_menu_nama, 213049_menu_jenis, 213049_menu_harga, 213049_menu_stok, 213049_idstatus, 213049_menu_gambar FROM tbl_menu_213049 WHERE 213049_id = :menuId";
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':menuId', $menuId);
-        $stmt->execute();
+        $stmt->execute([':menuId', $menuId]);
     
         $menuData = $stmt->fetch(\PDO::FETCH_ASSOC);
         try{
@@ -87,13 +82,14 @@ class MenuRepository
             $stmt->closeCursor();
         }
     }
-    // Fungsi untuk mendapatkan detail menu berdasarkan ID
-    public function getMenuByJenis(string $jenis)
+
+    public function getByJenis(string $jenis)
     {
         $query = "SELECT 213049_id, 213049_menu_nama, 213049_menu_jenis, 213049_menu_harga, 213049_menu_stok, 213049_idstatus, 213049_menu_gambar FROM tbl_menu_213049 WHERE 213049_menu_jenis = :jenis";
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':jenis', $jenis);
-        $stmt->execute();
+        $stmt->execute([
+            ':jenis' => $jenis
+        ]);
 
         $menuDataList = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     
@@ -114,8 +110,6 @@ class MenuRepository
         return $menuList;
     }
     
-
-    // Fungsi untuk mengupdate menu berdasarkan ID
     public function update(Menu $menu): Menu
     {
         $query = "UPDATE tbl_menu_213049
@@ -125,23 +119,24 @@ class MenuRepository
                   WHERE 213049_id = :menuId";
         
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':menuId', $menu->id);
-        $stmt->bindParam(':menuNama', $menu->nama);
-        $stmt->bindParam(':menuJenis', $menu->jenis);
-        $stmt->bindParam(':menuHarga', $menu->harga);
-        $stmt->bindParam(':menuStok', $menu->stok);
-        $stmt->bindParam(':idStatus', $menu->status);
-        $stmt->bindParam(':menuGambar', $menu->gambar);
-        $stmt->execute();
+        $stmt->execute([
+            ':menuId' => $menu->id,
+            ':menuNama' => $menu->nama,
+            ':menuJenis' => $menu->jenis,
+            ':menuHarga' => $menu->harga,
+            ':menuStok' => $menu->stok,
+            ':idStatus' => $menu->status,
+            ':menuGambar' => $menu->gambar
+        ]);
         return $menu;
     }
 
-    // Fungsi untuk menghapus menu berdasarkan ID
     public function delete(int $menuId): void
     {
         $query = "DELETE FROM tbl_menu_213049 WHERE 213049_id = :menuId";
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':menuId', $menuId);
-        $stmt->execute();
+        $stmt->execute([
+            ':menuId' => $menuId
+        ]);
     }
 }

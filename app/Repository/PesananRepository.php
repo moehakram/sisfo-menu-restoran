@@ -13,7 +13,6 @@ class PesananRepository
         $this->connection = $connection;
     }
 
-    // Fungsi untuk menambahkan pesanan baru
     public function save(Pesanan $pesanan): Pesanan
     {
         $query = "INSERT INTO tbl_pesanan_213049 
@@ -25,22 +24,22 @@ class PesananRepository
                           :menuHarga)";
         
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':idOrder', $pesanan->idOrder);
-        $stmt->bindParam(':jumlah', $pesanan->jumlah);
-        $stmt->bindParam(':idStatus', $pesanan->idStatus);
-        $stmt->bindParam(':idMenu', $pesanan->idMenu);
-        $stmt->bindParam(':subtotal', $pesanan->subtotal);
-        $stmt->bindParam(':menuNama', $pesanan->menuNama);
-        $stmt->bindParam(':menuHarga', $pesanan->menuHarga);
-        $stmt->execute();
+        $stmt->execute([
+            ':idOrder' => $pesanan->idOrder,
+            ':jumlah' => $pesanan->jumlah,
+            ':idStatus' => $pesanan->idStatus,
+            ':idMenu' => $pesanan->idMenu,
+            ':subtotal' => $pesanan->subtotal,
+            ':menuNama' => $pesanan->menuNama,
+            ':menuHarga' => $pesanan->menuHarga
+        ]);
     
         $pesanan->id = $this->connection->lastInsertId();
 
         return $pesanan;
     }
 
-    // Fungsi untuk mendapatkan daftar semua pesanan
-    public function getAllPesanan()
+    public function getAll()
     {
         $query = "SELECT 213049_id, 213049_idorder, 213049_jumlah, 
                           213049_idstatus, 213049_idmenu, 213049_subtotal, 
@@ -67,8 +66,7 @@ class PesananRepository
         return $pesananList;
     }
 
-    // Fungsi untuk mendapatkan detail pesanan berdasarkan ID
-    public function getPesananById(int $pesananId): ?Pesanan
+    public function getById(int $pesananId): ?Pesanan
     {
         $query = "SELECT 213049_id, 213049_idorder, 213049_jumlah, 
                           213049_idstatus, 213049_idmenu, 213049_subtotal, 
@@ -100,7 +98,6 @@ class PesananRepository
         }
     }
 
-    // Fungsi untuk mengupdate pesanan berdasarkan ID
     public function update(Pesanan $pesanan): Pesanan
     {
         $query = "UPDATE tbl_pesanan_213049 
@@ -111,20 +108,20 @@ class PesananRepository
                   WHERE 213049_id = :pesananId";
         
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':pesananId', $pesanan->id);
-        $stmt->bindParam(':idOrder', $pesanan->idOrder);
-        $stmt->bindParam(':jumlah', $pesanan->jumlah);
-        $stmt->bindParam(':idStatus', $pesanan->idStatus);
-        $stmt->bindParam(':idMenu', $pesanan->idMenu);
-        $stmt->bindParam(':subtotal', $pesanan->subtotal);
-        $stmt->bindParam(':menuNama', $pesanan->menuNama);
-        $stmt->bindParam(':menuHarga', $pesanan->menuHarga);
-        $stmt->execute();
+        $stmt->execute([
+            ':pesananId' => $pesanan->id,
+            ':idOrder' => $pesanan->idOrder,
+            ':jumlah' => $pesanan->jumlah,
+            ':idStatus' => $pesanan->idStatus,
+            ':idMenu' => $pesanan->idMenu,
+            ':subtotal' => $pesanan->subtotal,
+            ':menuNama' => $pesanan->menuNama,
+            ':menuHarga' => $pesanan->menuHarga
+        ]);
         
         return $pesanan;
     }
 
-    // Fungsi untuk menghapus pesanan berdasarkan ID
     public function delete(int $pesananId): void
     {
         $query = "DELETE FROM tbl_pesanan_213049 WHERE 213049_id = :pesananId";

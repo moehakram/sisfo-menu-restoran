@@ -13,23 +13,22 @@ class MejaRepository
         $this->connection = $connection;
     }
 
-    // Fungsi untuk menambahkan meja baru
-    public function addMeja(Meja $meja): Meja
+    public function save(Meja $meja): Meja
     {
         $query = "INSERT INTO tbl_meja_213049 (213049_no_meja, 213049_status_meja) VALUES (:noMeja, :statusMeja)";
         
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':noMeja', $meja->nomor);
-        $stmt->bindParam(':statusMeja', $meja->status);
-        $stmt->execute();
+        $stmt->execute([
+            ':noMeja'=> $meja->nomor,
+            ':statusMeja'=> $meja->status
+        ]);
     
         $meja->setId($this->connection->lastInsertId());
 
         return $meja;
     }
 
-    // Fungsi untuk mendapatkan daftar semua meja
-    public function getAllMeja()
+    public function getAll()
     {
         $query = "SELECT 213049_no_meja, 213049_status_meja FROM tbl_meja_213049";
         $stmt = $this->connection->query($query);
@@ -47,13 +46,12 @@ class MejaRepository
         return $mejaList;
     }
 
-    // Fungsi untuk mendapatkan detail meja berdasarkan nomor meja
-    public function getMejaByNoMeja(int $noMeja): ?Meja
+    public function getByNo(int $noMeja): ?Meja
     {
         $query = "SELECT 213049_no_meja, 213049_status_meja FROM tbl_meja_213049 WHERE 213049_no_meja = :noMeja";
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':noMeja', $noMeja);
-        $stmt->execute();
+
+        $stmt->execute([':noMeja'=>$noMeja]);
     
         $mejaData = $stmt->fetch(\PDO::FETCH_ASSOC);
         try {
@@ -71,25 +69,24 @@ class MejaRepository
         }
     }
 
-    // Fungsi untuk mengupdate status meja berdasarkan nomor meja
-    public function updateMejaStatus(Meja $meja): Meja
+    public function update(Meja $meja): Meja
     {
-        $query = "UPDATE tbl_meja_213049 SET 213049_status_meja = :statusMeja WHERE 213049_no_meja = :noMeja";
-        
+        $query = "UPDATE tbl_meja_213049 SET 213049_status_meja = :statusMeja WHERE 213049_no_meja = :noMeja";    
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':noMeja', $meja->nomor);
-        $stmt->bindParam(':statusMeja', $meja->status);
-        $stmt->execute();
+        $stmt->execute([
+            ':noMeja'=> $meja->nomor,
+            ':statusMeja'=> $meja->status
+        ]);
 
         return $meja;
     }
 
-    // Fungsi untuk menghapus meja berdasarkan nomor meja
-    public function deleteMeja(int $noMeja): void
+    public function delete(int $noMeja): void
     {
         $query = "DELETE FROM tbl_meja_213049 WHERE 213049_no_meja = :noMeja";
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':noMeja', $noMeja);
-        $stmt->execute();
+        $stmt->execute([
+            ':noMeja'=> $noMeja
+        ]);
     }
 }
