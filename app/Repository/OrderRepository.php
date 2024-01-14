@@ -13,7 +13,6 @@ class OrderRepository
         $this->connection = $connection;
     }
 
-    // Fungsi untuk menambahkan order baru
     public function save(Order $order): Order
     {
         $query = "INSERT INTO tbl_order_213049 
@@ -46,7 +45,6 @@ class OrderRepository
         return $order;
     }
 
-    // Fungsi untuk mendapatkan daftar semua order
     public function getAll()
     {
         $query = "SELECT 213049_id, 213049_idadmin, 213049_idpengunjung, 
@@ -78,7 +76,6 @@ class OrderRepository
         return $orderList;
     }
 
-    // Fungsi untuk mendapatkan detail order berdasarkan ID
     public function getById(int $orderId): ?Order
     {
         $query = "SELECT 213049_id, 213049_idadmin, 213049_idpengunjung, 
@@ -115,7 +112,6 @@ class OrderRepository
         }
     }
 
-    // Fungsi untuk mengupdate order berdasarkan ID
     public function update(Order $order): Order
     {
         $query = "UPDATE tbl_order_213049 
@@ -144,7 +140,6 @@ class OrderRepository
         return $order;
     }
 
-    // Fungsi untuk menghapus order berdasarkan ID
     public function delete(int $orderId): void
     {
         $query = "DELETE FROM tbl_order_213049 WHERE 213049_id = :orderId";
@@ -162,5 +157,5 @@ class OrderRepository
 
         return $result > 0;
     }
-    
+
 }
