@@ -31,10 +31,10 @@ $router->post("/entri-referensi/getUbah", "EntriReferensiController@getUbah", [M
 $router->post("/entri-referensi/ubah", "EntriReferensiController@ubah", [MustLoginMiddleware::class, Role::ADMIN]);
 $router->get("/entri-referensi/hapus", "EntriReferensiController@hapus", [MustLoginMiddleware::class, Role::ADMIN]);
 
-$router->get("/entri-order", "EntriOrderController@index", [MustLoginMiddleware::class, Role::ADMIN]);
-$router->post("/entri-order/getdata", "EntriOrderController@getData", [MustLoginMiddleware::class, Role::ADMIN]);
-$router->post("/entri-order/checkout", "EntriOrderController@postCheckout", [MustLoginMiddleware::class, Role::ADMIN]);
-$router->get("/entri-order/checkout", "EntriOrderController@checkout", [MustLoginMiddleware::class, Role::ADMIN]);
+$router->get("/entri-order", "EntriOrderanController@index", [MustLoginMiddleware::class, Role::ADMIN]);
+$router->post("/entri-order/getdata", "EntriOrderanController@getMenu", [MustLoginMiddleware::class, Role::ADMIN]);
+$router->post("/entri-order/checkout", "EntriOrderanController@postCheckout", [MustLoginMiddleware::class, Role::ADMIN]);
+$router->get("/entri-order/checkout", "EntriOrderanController@checkout", [MustLoginMiddleware::class, Role::ADMIN]);
 
 $router->get("/entri-pegawai", "EntriPegawaiController@index", [MustLoginMiddleware::class, Role::ADMIN]);
 $router->post("/entri-pegawai/tambah", "EntriPegawaiController@tambahPegawai", [MustLoginMiddleware::class, Role::ADMIN]);

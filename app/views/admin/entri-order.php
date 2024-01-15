@@ -24,23 +24,23 @@
 
                             <?php foreach($data['makanan'] as $makanan): ?>
                             <div class="card p-1 m-1" style="width: 14rem;">
-                                <img src="<?= SRC_UPLOAD.'entri-makanan/'.$makanan['213049_menu_gambar']; ?>"
+                                <img src="<?= SRC_UPLOAD.'entri-makanan/'.$makanan->gambar; ?>"
                                     class="card-img-top" alt="...">
                                 <div class="card-body">
-                                    <h5 class="card-title text-center"><?= $makanan["213049_menu_nama"] ; ?></h5>
+                                    <h5 class="card-title text-center"><?= $makanan->nama ; ?></h5>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">Harga/Porsi <div class="float-right">
-                                            <?= formatRupiah($makanan["213049_menu_harga"]) ; ?></div>
+                                            <?= formatRupiah($makanan->harga) ; ?></div>
                                     </li>
                                     <li class="list-group-item">Stok <div class="float-right">
-                                            <?= $makanan["213049_menu_stok"] ; ?></div>
+                                            <?= $makanan->stok ; ?></div>
                                     </li>
                                 </ul>
                                 <div class="card-body">
-                                    <button type="button" data-id="<?= $makanan['213049_id']; ?>"
+                                    <button type="button" data-id="<?= $makanan->id; ?>"
                                         class="btn btn-primary addTocart float-right"
-                                        <?= ($makanan['213049_menu_stok'] == 0) ? 'disabled': ''; ?>>pesan</button>
+                                        <?= ($makanan->stok == 0) ? 'disabled': ''; ?>>pesan</button>
                                 </div>
                             </div>
                             <?php endforeach;?>
@@ -81,10 +81,10 @@
                                 <th colspan="2"><select class="form-control w-75" id="meja">
                                         <!-- <option value=0>--pilih--</option> -->
                                         <?php foreach ($data['meja'] as $meja): ?>
-                                        <option value="<?= $meja['213049_no_meja']; ?>"
-                                            <?= ($meja['213049_no_meja'] == ($_SESSION['no_meja']??0)) ? 'selected' : ''; ?>
-                                            <?= ($meja['213049_status_meja'] == '2') ? 'disabled' : ''; ?>>
-                                            <?= 'MEJA ' . $meja['213049_no_meja'] . ': ' . ($meja['213049_status_meja'] == '1' ? 'tersedia' : 'tidak tersedia'); ?>
+                                        <option value="<?= $meja->nomor; ?>"
+                                            <?= ($meja->nomor == ($_SESSION['no_meja']??0)) ? 'selected' : ''; ?>
+                                            <?= ($meja->status == '2') ? 'disabled' : ''; ?>>
+                                            <?= 'MEJA ' . $meja->nomor . ': ' . ($meja->status == '1' ? 'tersedia' : 'tidak tersedia'); ?>
                                         </option>
                                         <?php endforeach; ?>
 
@@ -117,23 +117,23 @@
 
                     <?php foreach($data['minuman'] as $minuman): ?>
                     <div class="card p-1 m-1" style="width: 14rem;">
-                        <img src="<?= SRC_UPLOAD.'entri-minuman/'.$minuman['213049_menu_gambar']; ?>"
+                        <img src="<?= SRC_UPLOAD.'entri-minuman/'.$minuman->gambar; ?>"
                             class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title text-center"><?= $minuman["213049_menu_nama"] ; ?></h5>
+                            <h5 class="card-title text-center"><?= $minuman->nama ; ?></h5>
                         </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">Harga/Porsi <div class="float-right">
-                                    <?= formatRupiah($minuman["213049_menu_harga"]) ; ?></div>
+                                    <?= formatRupiah($minuman->harga) ; ?></div>
                             </li>
                             <li class="list-group-item">Stok <div class="float-right">
-                                    <?= $minuman["213049_menu_stok"] ; ?></div>
+                                    <?= $minuman->stok ; ?></div>
                             </li>
                         </ul>
                         <div class="card-body">
-                            <button type="button" data-id="<?= $minuman['213049_id']; ?>"
+                            <button type="button" data-id="<?= $minuman->id; ?>"
                                 class="btn btn-primary addTocart float-right"
-                                <?= ($minuman['213049_menu_stok'] == 0) ? 'disabled': ''; ?>>pesan</button>
+                                <?= ($minuman->stok == 0) ? 'disabled': ''; ?>>pesan</button>
                         </div>
                     </div>
                     <?php endforeach;?>

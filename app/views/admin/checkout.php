@@ -50,21 +50,21 @@
                             <?php $i=1; $total=0; foreach($data['pesanan'] as $pesanan ) : ?>
                             <tr class="text-center">
                                 <td><?= $i++ ?></td>
-                                <td><?= $pesanan['nama_menu'] ?></td>
-                                <td><?= $pesanan['jumlah'] ?></td>
-                                <td><?= $pesanan['harga_satuan'] ?></td>
-                                <td><?= $pesanan['subtotal'] ?></td>
+                                <td><?= $pesanan->menuNama ?></td>
+                                <td><?= $pesanan->jumlah ?></td>
+                                <td><?= $pesanan->menuHarga ?></td>
+                                <td><?= $pesanan->subTotal ?></td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
                         <tfoot class="text-center">
                             <tr>
                                 <th colspan="4">Total Harga</th>
-                                <td><?= $data['pesanan'][0]['total_harga'] ?></td>
+                                <td><?= $data['order']->totalHarga ?></td>
                             </tr>
                             <tr>
                                 <th colspan="4">Nomor Meja</th>
-                                <td><?= $data['pesanan'][0]['nomor_meja'] ?></td>
+                                <td><?= $data['order']->noMeja ?></td>
                             </tr>
                         </tfoot>
                     </table>

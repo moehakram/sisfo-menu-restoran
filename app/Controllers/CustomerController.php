@@ -68,22 +68,10 @@ class CustomerController extends Controller{
     
     public function getMeja()
     {
-        // $this->updateMeja(5);
         $dataMeja = (new MejaRepository(Database::getConnection()))->getByStatus();
         $this->response->setContent(json_encode($dataMeja));
     }
-
-    private function updateMeja($nomor)
-    {
-        $dataMeja = (new MejaRepository(Database::getConnection()));
-        $meja = new \App\Domain\Meja();
-        $meja->nomor = $nomor;
-        $meja->status = 1;
-        $dataMeja->update($meja);
-    }
-
-
-    
+   
     public function postCheckout() {
         $orderRepository = new OrderRepository(Database::getConnection());
         if ($orderRepository->hasOrderedBefore($this->user->id)) {

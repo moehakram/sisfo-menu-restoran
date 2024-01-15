@@ -11,53 +11,23 @@ use App\Domain\Menu;
 class EntriOrderanController extends Controller{
 
     public function index() {
-        if($this->user == null){
             $menuRepository = new MenuRepository(Database::getConnection());
             $dataMakanan = $menuRepository->getByJenis('Makanan');
             $dataMinuman = $menuRepository->getByJenis('Minuman');
-            $view = View::renderViewOnly('index', [
-                "title" => "Login Management",
-                "makanan" => $dataMakanan,
-                "minuman" => $dataMinuman
-            ]);
-            $this->response->setContent($view);
-        }else{
-            if($this->user->level !== 1) $this->response->redirect('/home');
-            
-            $view = View::renderView('admin/dashboard', [
-                "title" => "Dashboard",
+            $dataMeja = (new MejaRepository(Database::getConnection()))->getAll();
+
+            $view = View::renderView('admin/entri-order', [
+                "title" => "Entri Order",
                 "user" => [
                     "name" => $this->user->name
                 ],
-                "jumlahMenu" => 27,
-                "jumlahOrder" => 50,
-                "pemasukan" => 20
+                "makanan" => $dataMakanan,
+                "minuman" => $dataMinuman,
+                "meja" => $dataMeja
             ]);
             $this->response->setContent($view);
-        }
     }
 
-    public function home($view = 'index') {
-        
-        $menuRepository = new MenuRepository(Database::getConnection());
-
-        $dataMakanan = $menuRepository->getByJenis('Makanan');
-        $dataMinuman = $menuRepository->getByJenis('Minuman');
-        $html = View::renderView("pelanggan/$view", [
-            "title" => "Restoran FOOD-HUNT",
-            "user" => [
-                "name" => $this->user->name
-            ],
-            "makanan" => $dataMakanan,
-            "minuman" => $dataMinuman
-        ]);
-
-        $this->response->setContent($html);
-    }
-
-    public function pesanMenu(){
-        $this->home('pesan-menu');
-    }
 
     public function getMenu()
     {
@@ -85,11 +55,6 @@ class EntriOrderanController extends Controller{
 
     
     public function postCheckout() {
-        $orderRepository = new OrderRepository(Database::getConnection());
-        if ($orderRepository->hasOrderedBefore($this->user->id)) {
-            $this->response->setContent(json_encode(['error' => 'Maaf, Anda sudah memesan sebelumnya.']));
-            return;
-        }
 
         $orderRequest = $this->model('UserDataOrderRequest');
         $orderRequest->idPengunjung = $this->user->id;
@@ -121,7 +86,7 @@ class EntriOrderanController extends Controller{
         $customerService = new CustomerService();
 
         $response = $customerService->getCheckout(["nama" => $this->user->name, "idOrder" =>$this->request->get('id')]);
-        $view = View::renderView('pelanggan/checkout', [
+        $view = View::renderView('admin/checkout', [
             "title" => "Entri Order",
             "user" => [
                 "name" => $this->user->name

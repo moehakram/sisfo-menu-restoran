@@ -150,7 +150,7 @@ $('.boton-item').on('click', function () {
 });
 
     $('.btn-pagar').on('click', function () {
-        if ($("#total").text() === "" || $("#total").text() === "Rp0") {
+        if (keranjangPesanan.quantity == 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
