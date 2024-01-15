@@ -125,9 +125,8 @@ class CustomerController extends Controller{
             "title" => "Entri Order",
             "user" => [
                 "name" => $this->user->name
-            ],
-            "checkout" => $response
-        ]);
+            ]
+        ]+$response);
 
         $this->response->setContent($view);
     }

@@ -13,7 +13,7 @@
                         <!-- Informasi Pembeli -->
                         <div id="buyer-info">
                             <h6>Nama Pembeli: <?= $data['user']['name'] ?></h6>
-                            <h6>waktu pesan: <?= $data['checkout']->order->waktuPesan ?></h6>
+                            <h6>waktu pesan: <?= $data['order']->waktuPesan ?></h6>
                         </div>
                         <!-- Order Table -->
                         <table class="table table-bordered">
@@ -26,7 +26,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($data['checkout']->pesanan as $pesanan ) : ?>
+                                <?php foreach ($data['pesanan'] as $pesanan ) : ?>
                                 <tr class="text-center">
                                     <td><?= $pesanan->jumlah ?></td>
                                     <td><?= $pesanan->menuNama ?></td>
@@ -39,12 +39,12 @@
                                 <tr>
                                     <th colspan="3">Total tagihan</th>
                                     <th>
-                                        <?= formatRupiah($data['checkout']->order->totalHarga) ?>
+                                        <?= formatRupiah($data['order']->totalHarga) ?>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th colspan="3">Nomor Meja</th>
-                                    <th><?= $data['checkout']->order->noMeja ?></th>
+                                    <th><?= $data['order']->noMeja ?></th>
                                 </tr>
                             </tfoot>
                         </table>

@@ -8,7 +8,6 @@ use App\Repository\OrderRepository;
 use App\Repository\PesananRepository;
 use App\Models\UserDataOrderRequest;
 use App\Models\UserDataOrderResponse;
-use App\Models\CheckoutResponse;
 
 
 class CustomerService
@@ -73,11 +72,7 @@ class CustomerService
         $order = $this->orderRepository->getById($data['idOrder']);
         $pesan = $this->pesananRepository->getAllByIdOrder($data['idOrder']);
 
-        $response = new CheckoutResponse();
-        $response->order = $order;
-        $response->pesanan = $pesan;
-
-        return $response;
+        return ['order'=> $order, 'pesanan' => $pesan];
     }
 
 }
