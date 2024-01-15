@@ -29,7 +29,7 @@ class PesananRepository
             ':jumlah' => $pesanan->jumlah,
             ':idStatus' => $pesanan->idStatus,
             ':idMenu' => $pesanan->idMenu,
-            ':subtotal' => $pesanan->subtotal,
+            ':subtotal' => $pesanan->subTotal,
             ':menuNama' => $pesanan->menuNama,
             ':menuHarga' => $pesanan->menuHarga
         ]);
@@ -65,6 +65,35 @@ class PesananRepository
     
         return $pesananList;
     }
+    public function getAllByIdOrder(int $idOrder)
+    {
+        $query = "SELECT 213049_id, 213049_idorder, 213049_jumlah, 
+                          213049_idstatus, 213049_idmenu, 213049_subtotal, 
+                          213049_menu_nama, 213049_menu_harga 
+                  FROM tbl_pesanan_213049 WHERE 213049_idorder = :idOrder AND 213049_idstatus = 2";
+        $stmt = $this->connection->prepare($query);
+        $stmt->execute([
+            ':idOrder' => $idOrder
+    ]);
+        $pesananDataList = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    
+        $pesananList = [];
+        foreach ($pesananDataList as $pesananData) {
+            $pesanan = new Pesanan();
+            $pesanan->id = $pesananData['213049_id'];
+            $pesanan->idOrder = $pesananData['213049_idorder'];
+            $pesanan->jumlah = $pesananData['213049_jumlah'];
+            $pesanan->idStatus = $pesananData['213049_idstatus'];
+            $pesanan->idMenu = $pesananData['213049_idmenu'];
+            $pesanan->subTotal = $pesananData['213049_subtotal'];
+            $pesanan->menuNama = $pesananData['213049_menu_nama'];
+            $pesanan->menuHarga = $pesananData['213049_menu_harga'];
+    
+            $pesananList[] = $pesanan;
+        }
+    
+        return $pesananList;
+    }
 
     public function getById(int $pesananId): ?Pesanan
     {
@@ -73,8 +102,7 @@ class PesananRepository
                           213049_menu_nama, 213049_menu_harga 
                   FROM tbl_pesanan_213049 WHERE 213049_id = :pesananId";
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(':pesananId', $pesananId);
-        $stmt->execute();
+        $stmt->execute([':pesananId' => $pesananId]);
     
         $pesananData = $stmt->fetch(\PDO::FETCH_ASSOC);
         try {

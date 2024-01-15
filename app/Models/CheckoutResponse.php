@@ -3,7 +3,7 @@ namespace app\Models;
 
 use App\Domain\Order;
 
-class UserDataOrderResponse
+class CheckoutResponse
 {
     public Order $order;
     public array $pesanan;

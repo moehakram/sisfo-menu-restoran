@@ -174,7 +174,6 @@ $('.boton-item').on('click', function () {
                     data: { menu_pesan: keranjangPesanan.items, total_harga: keranjangPesanan.total, no_meja: keranjangPesanan.noMeja },
                     dataType: 'json',
                     success: function (response) {
-                        console.log(response);
                         if (response.error) {
                             Swal.fire({
                                 icon: 'warning',

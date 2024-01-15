@@ -3,8 +3,8 @@ namespace App\Controllers;
 
 use App\Core\Database\Database;
 use App\Core\MVC\{Controller, View};
-use App\Repository\{MenuRepository, MejaRepository};
-use App\Service\OrderanService;
+use App\Repository\{MenuRepository, MejaRepository, OrderRepository};
+use App\Service\CustomerService;
 use App\Exception\ValidationException;
 use App\Domain\Menu;
 
@@ -68,16 +68,28 @@ class CustomerController extends Controller{
     
     public function getMeja()
     {
+        // $this->updateMeja(5);
         $dataMeja = (new MejaRepository(Database::getConnection()))->getByStatus();
         $this->response->setContent(json_encode($dataMeja));
     }
+
+    private function updateMeja($nomor)
+    {
+        $dataMeja = (new MejaRepository(Database::getConnection()));
+        $meja = new \App\Domain\Meja();
+        $meja->nomor = $nomor;
+        $meja->status = 1;
+        $dataMeja->update($meja);
+    }
+
+
     
     public function postCheckout() {
         $orderRepository = new OrderRepository(Database::getConnection());
-        if ($orderRepository->hasOrderedBefore($this->user->id)) {
-            $this->response->setContent(json_encode(['error' => 'Maaf, Anda sudah memesan sebelumnya.']));
-            return;
-        }
+        // if ($orderRepository->hasOrderedBefore($this->user->id)) {
+        //     $this->response->setContent(json_encode(['error' => 'Maaf, Anda sudah memesan sebelumnya.']));
+        //     return;
+        // }
 
         $orderRequest = $this->model('UserDataOrderRequest');
         $orderRequest->idPengunjung = $this->user->id;
@@ -85,25 +97,39 @@ class CustomerController extends Controller{
         $orderRequest->noMeja = $this->request->post('no_meja');
         $orderRequest->totalHarga = $this->request->post('total_harga');
         $orderRequest->idStatus = 2;
-
+        $orderRequest->namaPengunjung = $this->user->name;
+        
         $pesananRequestList = [];
         foreach($this->request->post('menu_pesan') as $menu){
             $pesananRequest = $this->model('UserDataPesanRequest');
             $pesananRequest->jumlah = $menu['jumlah'];
-            $pesananRequest->idstatus = 2;
+            $pesananRequest->idStatus = 2;
             $pesananRequest->idMenu = $menu['id'];
-            $pesananRequest->subtotal = $menu['subtotal'];
+            $pesananRequest->subTotal = $menu['subtotal'];
             $pesananRequest->menuNama = $menu['nama'];
             $pesananRequest->menuHarga = $menu['harga'];
             $pesananRequestList[] = $pesananRequest;
         }
-
         
-        $orderanService = new OrderanService();
-        $orderanService->create($orderRequest, $pesananRequestList);
-
         
-        $this->response->setContent(json_encode(['orderId' => $orderanResponse->id]));
+        $customerService = new CustomerService();
+        $response = $customerService->create($orderRequest, $pesananRequestList);     
+        $this->response->setContent(json_encode(['orderId' => $response->order->id]));
+    }
+
+    public function checkout(){
+        $customerService = new CustomerService();
+
+        $response = $customerService->getCheckout(["nama" => $this->user->name, "idOrder" =>$this->request->get('id')]);
+        $view = View::renderView('pelanggan/checkout', [
+            "title" => "Entri Order",
+            "user" => [
+                "name" => $this->user->name
+            ],
+            "checkout" => $response
+        ]);
+
+        $this->response->setContent($view);
     }
 
 }

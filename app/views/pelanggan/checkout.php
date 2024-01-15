@@ -13,7 +13,7 @@
                         <!-- Informasi Pembeli -->
                         <div id="buyer-info">
                             <h6>Nama Pembeli: <?= $data['user']['name'] ?></h6>
-                            <h6>waktu pesan: <?= $data['pesanan'][0]['waktu_pesan'] ?></h6>
+                            <h6>waktu pesan: <?= $data['checkout']->order->waktuPesan ?></h6>
                         </div>
                         <!-- Order Table -->
                         <table class="table table-bordered">
@@ -26,12 +26,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($data['pesanan'] as $pesanan) : ?>
+                                <?php foreach ($data['checkout']->pesanan as $pesanan ) : ?>
                                 <tr class="text-center">
-                                    <td><?= $pesanan['jumlah'] ?></td>
-                                    <td><?= $pesanan['nama_menu'] ?></td>
-                                    <td><?= formatRupiah($pesanan['harga_satuan']) ?></td>
-                                    <td><?= formatRupiah($pesanan['subtotal']) ?></td>
+                                    <td><?= $pesanan->jumlah ?></td>
+                                    <td><?= $pesanan->menuNama ?></td>
+                                    <td><?= formatRupiah($pesanan->menuHarga) ?></td>
+                                    <td><?= formatRupiah($pesanan->subTotal) ?></td>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -39,12 +39,12 @@
                                 <tr>
                                     <th colspan="3">Total tagihan</th>
                                     <th>
-                                        <?= formatRupiah($data['pesanan'][0]['total_harga']) ?>
+                                        <?= formatRupiah($data['checkout']->order->totalHarga) ?>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th colspan="3">Nomor Meja</th>
-                                    <th><?= $data['pesanan'][0]['nomor_meja'] ?></th>
+                                    <th><?= $data['checkout']->order->noMeja ?></th>
                                 </tr>
                             </tfoot>
                         </table>
