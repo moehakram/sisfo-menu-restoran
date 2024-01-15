@@ -86,10 +86,10 @@ class CustomerController extends Controller{
     
     public function postCheckout() {
         $orderRepository = new OrderRepository(Database::getConnection());
-        // if ($orderRepository->hasOrderedBefore($this->user->id)) {
-        //     $this->response->setContent(json_encode(['error' => 'Maaf, Anda sudah memesan sebelumnya.']));
-        //     return;
-        // }
+        if ($orderRepository->hasOrderedBefore($this->user->id)) {
+            $this->response->setContent(json_encode(['error' => 'Maaf, Anda sudah memesan sebelumnya.']));
+            return;
+        }
 
         $orderRequest = $this->model('UserDataOrderRequest');
         $orderRequest->idPengunjung = $this->user->id;
