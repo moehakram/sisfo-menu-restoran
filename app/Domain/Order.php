@@ -4,7 +4,7 @@ namespace App\Domain;
 
 class Order
 {
-    public ?int $id = null;
+    public int $id;
     public ?string $idAdmin;
     public string $idPengunjung;
     public string $waktuPesan;
