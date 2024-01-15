@@ -21,7 +21,6 @@ class EntriOrderController extends Controller {
         $model = $this->entrimodel->getMenuById($this->request->post('id'));
         echo json_encode($model);
     }
-    
 
     public function postCheckout() {
         $data = $this->request->post();
@@ -47,10 +46,6 @@ class EntriOrderController extends Controller {
         unset($_SESSION['no_meja']);
         echo json_encode(["orderId" => $idOrder]);
     }
-    // public function postCheckout() {
-    //     $data = $this->request->post();
-    //     echo json_encode($data);
-    // }
 
     public function checkout(){
         $model = $this->entrimodel->checkout(["nama" => $this->user->name, "idOrder" =>$this->request->get('id')]);

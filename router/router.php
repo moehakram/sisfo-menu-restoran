@@ -11,8 +11,6 @@ $router->post("/checkout", "CustomerController@postCheckout", [MustLoginMiddlewa
 $router->get("/checkout", "CustomerController@checkout", [MustLoginMiddleware::class]);
 $router->get("/getTableNumbers", "CustomerController@getMeja", [MustLoginMiddleware::class]);
 
-// $router->get('/dashboard', 'HomeController@dashboard', [MustLoginMiddleware::class, Role::ADMIN]);
-
 $router->get("/user/register", "UserController@register", [MustNotLoginMiddleware::class]);
 $router->post("/user/register", "UserController@postRegister", [MustNotLoginMiddleware::class]);
 
