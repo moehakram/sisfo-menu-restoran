@@ -57,6 +57,25 @@ $(function () {
             tampilan();
         },
 
+        handleInputChange: function(input, item) {
+            const inputValue = input.val().trim();
+        
+            if (inputValue === "" || parseInt(inputValue) < 1) {
+                input.val(1);
+                item.jumlah = 1;
+            } else if (parseInt(inputValue) > item.stok) {
+                alert("Stok sisa " + item.stok);
+                input.val(item.stok);
+                item.jumlah = item.stok;
+            } else {
+                item.jumlah = parseInt(inputValue, 10);
+            }
+        
+            this.updateTotalHarga();
+        },
+        
+        
+
         hapusItem: function (id) {
             const index = this.items.findIndex(item => item.id === id);
             if (index !== -1) {
@@ -71,10 +90,10 @@ $(function () {
             this.total = this.items.reduce((total, item) => total + item.harga * item.jumlah, 0);
             this.quantity = this.items.reduce((total, item) => total + item.jumlah, 0);
         
-            const totalHargaElement = $("#total"); // Update this line to use jQuery selector
+            const totalHargaElement = $("#total");
             const formatRupiah = (number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
         
-            totalHargaElement.val(formatRupiah(this.total)); // Update this line to use .val() instead of .value
+            totalHargaElement.val(formatRupiah(this.total));
         }
         
     };
@@ -133,7 +152,7 @@ $(function () {
                                     dataType: 'json',
                                     success: function (data) {
                                         keranjangPesanan.noMeja = result.value;
-                                        $('.nMeja').text(keranjangPesanan.noMeja);        
+                                        $('#meja').val(keranjangPesanan.noMeja);        
                                         keranjangPesanan.add(data);
                                     }
                                 });
@@ -167,7 +186,9 @@ $(function () {
             });
             return;
         }
-
+        
+        const nomorMejaSelect = $("#meja");
+        keranjangPesanan.noMeja = nomorMejaSelect.val();
         Swal.fire({
             title: 'Anda yakin ingin Checkout?',
             icon: 'warning',
@@ -231,8 +252,10 @@ $(function () {
                 .attr("id", item.id)
                 .attr("name", item.id)
                 .val(item.jumlah)
-                .on("input", () => keranjangPesanan.handleInputChange(input, item));
-    
+                .on("input", function() {
+                    keranjangPesanan.handleInputChange($(this), item);
+                });
+
             cell2.append(input);
     
             const cell3 = $("<td></td>");
@@ -251,11 +274,8 @@ $(function () {
             rowIndex++;
         });
         keranjangPesanan.updateTotalHarga();
-    
-    
-        // Update Nomor Meja in the footer
-        const nomorMejaSelect = $("#meja");
-        nomorMejaSelect.val(keranjangPesanan.noMeja);
+
+
     }
     
 
