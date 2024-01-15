@@ -158,8 +158,6 @@
     
       <!-- sweet allert -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- <script src="<?= SRC_PUBLIC; ?>src/js/reservasi.js"></script> -->
     
   <script src="<?= SRC_PUBLIC; ?>src/app.js"></script>
 
