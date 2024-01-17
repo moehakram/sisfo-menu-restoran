@@ -57,7 +57,8 @@ class Router
         // print_r($matchRouter);die;
         // echo '</pre>';
         if ($matchRouter==null) {
-            $this->response->setContent("Route tidak ditemukan !");
+            // $this->response->setContent("Route tidak ditemukan !");
+            $this->sendNotFound();
         } else {
             $params = $routeMatcher->getParams();
             $this->executeRoute($matchRouter, $params);
@@ -86,12 +87,19 @@ class Router
             if (method_exists($controller, $method)) {
                 $controller->$method();
             } else {
-                $this->response->setContent("Method tidak ada");
+                // $this->response->setContent("Method tidak ada");
+                $this->sendNotFound();
             }
         } else {
-            $this->response->setContent("File atau Controller Class tidak ada");
+            // $this->response->setContent("File atau Controller Class tidak ada");
+            $this->sendNotFound();
         }
     }
+
+    private function sendNotFound() {
+		// $this->response->setContent("Maaf Route tidak ditemukan !");
+        $this->response->redirect('/');
+	}
 
     public function cleanUrl($url)
     {
