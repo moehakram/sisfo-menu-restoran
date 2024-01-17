@@ -37,21 +37,21 @@
                                <?php
                 foreach($data['makanan'] as $makanan): ?>
                                <tr>
-                                   <td><?= $makanan["213049_menu_nama"] ; ?></td>
-                                   <td><?= formatRupiah($makanan["213049_menu_harga"]) ; ?></td>
-                                   <td><?= $makanan["213049_menu_stok"] ; ?></td>
-                                   <td><?= $makanan["213049_status_menu"] ; ?></td>
+                                   <td><?= $makanan->nama ; ?></td>
+                                   <td><?= formatRupiah($makanan->harga) ; ?></td>
+                                   <td><?= $makanan->stok ; ?></td>
+                                   <td><?= $makanan->status ; ?></td>
                                    <td>
                                        <img width="100px"
-                                           src="<?= SRC_UPLOAD.'entri-makanan/'.$makanan['213049_menu_gambar']; ?>" alt="no">
+                                           src="<?= SRC_UPLOAD.'entri-makanan/'.$makanan->gambar; ?>" alt="no">
                                    </td>
                                    <td class="grid grid-cols-2 gap-2">
                                        <button type="button" class="btn btn-warning tampilModalUbah"
-                                           data-id="<?= $makanan['213049_id']; ?>" data-jenis="makanan" role="button"
+                                           data-id="<?= $makanan->id; ?>" data-jenis="makanan" role="button"
                                            data-toggle="modal" data-target="#formModal">Edit</button>
                                        <!-- <a class="btn btn-danger"
-                                           href="/entri-referensi/hapus?id=<?= $makanan['213049_id']; ?>" role="button">Hapus</a> -->
-                                       <button class="btn btn-danger hapus-menu" data-id="<?= $makanan['213049_id']; ?>">Hapus</button>
+                                           href="/entri-referensi/hapus?id=<?= $makanan->id; ?>" role="button">Hapus</a> -->
+                                       <button class="btn btn-danger hapus-menu" data-id="<?= $makanan->id; ?>">Hapus</button>
                                    </td>
                                </tr>
                                <?php endforeach;?>
@@ -90,21 +90,21 @@
                
                 foreach($data['minuman'] as $minuman): ?>
                                <tr>
-                                   <td><?= $minuman["213049_menu_nama"] ; ?></td>
-                                   <td><?= formatRupiah($minuman["213049_menu_harga"]) ; ?></td>
-                                   <td><?= $minuman["213049_menu_stok"] ; ?></td>
-                                   <td><?= $minuman["213049_status_menu"] ; ?></td>
+                                   <td><?= $minuman->nama ; ?></td>
+                                   <td><?= formatRupiah($minuman->harga) ; ?></td>
+                                   <td><?= $minuman->stok ; ?></td>
+                                   <td><?= $minuman->status ; ?></td>
                                    <td>
                                        <img width="100px"
-                                           src="<?= SRC_UPLOAD .'entri-minuman/'.$minuman['213049_menu_gambar']; ?>"
+                                           src="<?= SRC_UPLOAD .'entri-minuman/'.$minuman->gambar; ?>"
                                            alt="no">
                                    </td>
                                    <td class="grid grid-cols-2 gap-2">
                                        <button type="button" class="btn btn-warning tampilModalUbah"
-                                           data-id="<?= $minuman['213049_id']; ?>" data-jenis="minuman" role="button"
+                                           data-id="<?= $minuman->id; ?>" data-jenis="minuman" role="button"
                                            data-toggle="modal" data-target="#formModal">Edit</button>
                                        <a class="btn btn-danger"
-                                           href="/entri-referensi/hapus?id=<?= $minuman['213049_id']; ?>&jenis=minuman"
+                                           href="/entri-referensi/hapus?id=<?= $minuman->id; ?>&jenis=minuman"
                                            role="button">Hapus</a>
                                    </td>
                                </tr>

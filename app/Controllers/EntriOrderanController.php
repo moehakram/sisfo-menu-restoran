@@ -6,7 +6,6 @@ use App\Core\MVC\{Controller, View};
 use App\Repository\{MenuRepository, MejaRepository, OrderRepository};
 use App\Service\CustomerService;
 use App\Exception\ValidationException;
-use App\Domain\Menu;
 
 class EntriOrderanController extends Controller{
 

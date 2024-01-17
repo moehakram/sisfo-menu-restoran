@@ -5,11 +5,11 @@ $(function() {
         const jenis = $(this).data('jenis');
         $('#modalTitle').html('Tambah Data ' + jenis);
         $('.modal-footer button[type=submit]').html('Tambah Data');
-        $('#id').val('');
-        $('#nama').val('');
+        $('#id').val();
+        $('#nama').val();
         $('#jenis').val(jenis);
-        $('#harga').val('');
-        $('#stok').val('');
+        $('#harga').val();
+        $('#stok').val();
     });
    
 
