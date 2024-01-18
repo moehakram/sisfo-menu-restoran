@@ -26,12 +26,12 @@ $(function() {
                 method: 'post',
                 dataType: 'json',
                 success: function(data) {
-                    $('#id').val(data['213049_id']);           
-                    $('#nama').val(data['213049_menu_nama']);
-                    $('#jenis').val(data['213049_menu_jenis']);          
-                    $('#harga').val(data['213049_menu_harga']);
-                    $('#stok').val(data['213049_menu_stok']);
-                    $('#status').val(data['213049_idstatus']);          
+                    $('#id').val(data['id']);           
+                    $('#nama').val(data['nama']);
+                    $('#jenis').val(data['jenis']);          
+                    $('#harga').val(data['harga']);
+                    $('#stok').val(data['stok']);
+                    $('#status').val(data['status']);
             }
         });
             

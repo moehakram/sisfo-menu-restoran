@@ -131,6 +131,26 @@ class MenuRepository
         return $menu;
     }
 
+    public function updateNoGambar(Menu $menu): Menu
+    {
+        $query = "UPDATE tbl_menu_213049
+                  SET 213049_menu_nama = :menuNama, 213049_menu_jenis = :menuJenis, 
+                      213049_menu_harga = :menuHarga, 213049_menu_stok = :menuStok, 
+                      213049_idstatus = :idStatus
+                  WHERE 213049_id = :menuId";
+        
+        $stmt = $this->connection->prepare($query);
+        $stmt->execute([
+            ':menuId' => $menu->id,
+            ':menuNama' => $menu->nama,
+            ':menuJenis' => $menu->jenis,
+            ':menuHarga' => $menu->harga,
+            ':menuStok' => $menu->stok,
+            ':idStatus' => $menu->status
+        ]);
+        return $menu;
+    }
+
     public function delete(int $menuId): void
     {
         $query = "DELETE FROM tbl_menu_213049 WHERE 213049_id = :menuId";

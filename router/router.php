@@ -28,7 +28,7 @@ $router->post("/user/password", "UserController@postupdatePassword", [MustLoginM
 $router->get("/entri-referensi", "EntriReferensiController@index", [MustLoginMiddleware::class, Role::ADMIN]);
 $router->post("/entri-referensi/tambahMenu", "EntriReferensiController@tambahMenu", [MustLoginMiddleware::class, Role::ADMIN]);
 $router->post("/entri-referensi/getUbah", "EntriReferensiController@getUbah", [MustLoginMiddleware::class, Role::ADMIN]);
-$router->post("/entri-referensi/ubah", "EntriReferensiController@ubah", [MustLoginMiddleware::class, Role::ADMIN]);
+$router->post("/entri-referensi/ubah", "EntriReferensiController@editMenu", [MustLoginMiddleware::class, Role::ADMIN]);
 $router->get("/entri-referensi/hapus", "EntriReferensiController@hapus", [MustLoginMiddleware::class, Role::ADMIN]);
 
 $router->get("/entri-order", "EntriOrderanController@index", [MustLoginMiddleware::class, Role::ADMIN]);

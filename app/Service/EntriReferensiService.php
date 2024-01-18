@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Core\Database\Database;
 use App\Exception\ValidationException;
-use App\Models\TambahMenuRequest;
+use App\Models\{TambahMenuRequest, EditMenuRequest};
 use App\Domain\Menu;
 use App\Repository\MenuRepository;
 
@@ -26,7 +26,8 @@ class EntriReferensiService{
 
         try {
             Database::beginTransaction();
-            if($this->uploadImage($tambahMenuRequest)){
+            $this->uploadImage($tambahMenuRequest);
+            if($tambahMenuRequest->gambar !== null){
                 $menu = new Menu();
                 $menu->id = $tambahMenuRequest->id;
                 $menu->nama = $tambahMenuRequest->nama;
@@ -54,9 +55,6 @@ class EntriReferensiService{
         if($request->nama==null || $request->harga==null || $request->stok == null || $request->status ==  null){
             throw new ValidationException("Semua field harus di isi");
         }
-        if(empty($request->gambar['tmp_name'])){
-            throw new ValidationException("gambar tidak boleh kosong");
-        }
     }
 
 
@@ -64,8 +62,10 @@ class EntriReferensiService{
     {
             $image = $tambahMenuRequest->gambar;
 
-            $file_type = $image['type'];
-
+            
+            if(empty($tambahMenuRequest->gambar['tmp_name'])){
+                throw new ValidationException("gambar tidak boleh kosong");
+            }
             // Get file extension
             $file_ext = explode('.', $image['name']);
             $file_ext = strtolower(end($file_ext));
@@ -88,9 +88,81 @@ class EntriReferensiService{
             
             if(move_uploaded_file($image['tmp_name'], $targetDirectory . $targetFileName)) {
                $tambahMenuRequest->gambar = $targetFileName;
-               return true;
             } else {
-               return false;
+                $tambahMenuRequest->gambar = null;
+            }
+         
+    }
+
+    public function updateMenu(EditMenuRequest $editMenuRequest) {
+        
+        // Validasi bahwa semua field diisi
+        $this->validasiEditMenuRequest($editMenuRequest);
+        
+        $menu = new Menu();
+        $menu->id = $editMenuRequest->id;
+        $menu->nama = $editMenuRequest->nama;
+        $menu->jenis = $editMenuRequest->jenis;
+        $menu->harga = $editMenuRequest->harga;
+        $menu->stok = $editMenuRequest->stok;
+        $menu->status = $editMenuRequest->status;
+        try {
+                Database::beginTransaction();
+                $this->updateImage($editMenuRequest);
+                if($editMenuRequest->gambar !== null){
+                    $menu->gambar = $editMenuRequest->gambar;
+                    $this->menuRepository->update($menu);
+                }else{
+                    $this->menuRepository->updateNoGambar($menu);
+                }
+                Database::commitTransaction();
+                return "Data berhasil di update";
+            } catch (\Exception $exception) {
+                Database::rollbackTransaction();
+                return $exception->getMessage();
+            }  
+    }
+
+    private function validasiEditMenuRequest(EditMenuRequest $request){
+        if($request->nama==null || $request->harga==null || $request->stok == null || $request->status ==  null){
+            throw new ValidationException("Semua field harus di isi");
+        }
+    }
+
+
+    private function updateImage(EditMenuRequest $editMenuRequest)
+    {
+            $image = $editMenuRequest->gambar;
+
+            if(empty($image['tmp_name'])){
+               $editMenuRequest->gambar = null;
+               return;
+            }
+            
+            // Get file extension
+            $file_ext = explode('.', $image['name']);
+            $file_ext = strtolower(end($file_ext));
+            
+            // White list extensions
+            $extensions = array("jpeg","jpg","png");
+            
+            // Check it's valid file for upload
+            if(in_array($file_ext, $extensions) === false) {
+               throw new ValidationException("Ekstensi tidak diizinkan, harap pilih file JPEG atau PNG.");
+            }
+            
+            // Check file size
+            if($image['size'] > 2097152) {
+               throw new ValidationException('Ukuran file maksimum 2 MB.');
+            }
+
+            $targetDirectory = __DIR__."/../../public/upload/entri-". $editMenuRequest->jenis . '/';
+            $targetFileName  = uniqid() . '_' . $editMenuRequest->nama. '.' .$file_ext;
+            
+            if(move_uploaded_file($image['tmp_name'], $targetDirectory . $targetFileName)) {
+               $editMenuRequest->gambar = $targetFileName;
+            } else {
+                $editMenuRequest->gambar = null;
             }
          
     }
