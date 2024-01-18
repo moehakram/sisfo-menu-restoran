@@ -3,9 +3,10 @@
 namespace App\Service;
 
 use App\Core\Database\Database;
-use App\Domain\{Order, Pesanan};
+use App\Domain\{Order, Pesanan, Meja};
 use App\Repository\OrderRepository;
 use App\Repository\PesananRepository;
+use App\Repository\MejaRepository;
 use App\Models\UserDataOrderRequest;
 use App\Models\UserDataOrderResponse;
 
@@ -38,6 +39,14 @@ class CustomerService
             $order->namaAdmin = $orderan->namaAdmin;
             $order->namaPengunjung = $orderan->namaPengunjung;
             $this->orderRepository->save($order);
+
+            $upmeja = new MejaRepository(Database::getConnection());
+
+            $meja = new Meja();
+            $meja->nomor = $order->noMeja;
+            $meja->status = 2;
+            $upmeja->update($meja);
+
             
             $newdata = [];
             foreach ($pesananList as $data) {
@@ -53,6 +62,8 @@ class CustomerService
                 
                 $newdata[] = $pesanan;
             }
+
+          
             Database::commitTransaction();
 
             
