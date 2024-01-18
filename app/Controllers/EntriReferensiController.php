@@ -25,7 +25,6 @@ class EntriReferensiController extends Controller {
             "minuman" => $dataMinuman
         ]);
         
-        // $this->response->setHeader('Content-Type: application/json; charset=UTF-8');
         $this->response->setContent($html);
     }
  
