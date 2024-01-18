@@ -13,7 +13,7 @@ $request = new Request();
 $response = new Response();
 
 // set common headers
-$response->setHeader('Access-Control-Allow-Origin: *');
+$response->setHeader('Access-Control-Allow-Origin: '. ORIGIN);
 $response->setHeader("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 $response->setHeader('Content-Type: text/html; charset=UTF-8');
 
@@ -21,7 +21,7 @@ $response->setHeader('Content-Type: text/html; charset=UTF-8');
 $router = new Router($request->getPath(), $request->getMethod(), $response);
 
 // include routes
-require_once ROOT . 'router/router.php';
+require_once ROUTER . 'router.php';
 
 // Router Run Request
 $router->run();
