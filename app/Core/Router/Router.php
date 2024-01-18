@@ -43,7 +43,7 @@ class Router
 
     public function addRoute($method, $pattern, $callback, $options = [])
     {
-        $this->router[] = (new addRoute($method, $pattern, $callback, $options))->add();
+        $this->router[] = (new AddRoute($method, $pattern, $callback, $options))->add();
     }
 
 
@@ -53,9 +53,7 @@ class Router
 
         $routeMatcher = new RouteMatcher($this->method, $this->url, $this->router);
         $matchRouter = $routeMatcher->getMatchingRoutes();
-        // echo '<pre>';
-        // print_r($matchRouter);die;
-        // echo '</pre>';
+
         if ($matchRouter==null) {
             // $this->response->setContent("Route tidak ditemukan !");
             $this->sendNotFound();

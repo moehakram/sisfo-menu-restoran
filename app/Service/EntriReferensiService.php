@@ -83,7 +83,7 @@ class EntriReferensiService{
                throw new ValidationException('Ukuran file maksimum 2 MB.');
             }
 
-            $targetDirectory = __DIR__."/../../public/upload/entri-". $tambahMenuRequest->jenis . '/';
+            $targetDirectory = UPLOAD ."entri-" . $tambahMenuRequest->jenis . '/';
             $targetFileName  = uniqid() . '_' . $tambahMenuRequest->nama. '.' .$file_ext;
             
             if(move_uploaded_file($image['tmp_name'], $targetDirectory . $targetFileName)) {
@@ -156,7 +156,7 @@ class EntriReferensiService{
                throw new ValidationException('Ukuran file maksimum 2 MB.');
             }
 
-            $targetDirectory = __DIR__."/../../public/upload/entri-". $editMenuRequest->jenis . '/';
+            $targetDirectory = UPLOAD ."entri-". $editMenuRequest->jenis . '/';
             $targetFileName  = uniqid() . '_' . $editMenuRequest->nama. '.' .$file_ext;
             
             if(move_uploaded_file($image['tmp_name'], $targetDirectory . $targetFileName)) {

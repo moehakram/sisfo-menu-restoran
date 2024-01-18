@@ -1,5 +1,6 @@
 <?php
 spl_autoload_register( function($class) {
+    $class = lcfirst($class);
     $file = ROOT . str_replace('\\', '/', $class) . '.php';
     if (file_exists($file)){
         require_once $file;
@@ -8,4 +9,4 @@ spl_autoload_register( function($class) {
     }
 });
 
-require_once ROOT . "App/helper/public.php";
+require_once APP . "helper/public.php";

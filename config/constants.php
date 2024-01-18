@@ -6,7 +6,7 @@ define('APP', ROOT . 'app/');
 define('CONTROLLERS', ROOT . 'app/Controllers/');
 define('MODELS', ROOT . 'app/Models/');
 define('VIEWS', ROOT . 'app/Views/');
-define('UPLOAD', ROOT . 'upload/');
+define('UPLOAD', ROOT . 'public/upload/');
 define('CONFIG', ROOT . 'config/');
 
 define('BASE_URL', "https://localhost:8080/");
