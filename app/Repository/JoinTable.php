@@ -1,19 +1,16 @@
 <?php
-namespace App\Models;
 
-class GenerateLaporanModel extends \App\Core\MVC\Model {
-    public function showData($name){
-        return [
-            "title" => "Entri Referensi",
-            "user" => [
-                "name" => $name
-            ],
-            "laporan" =>$this->generateLaporan()
-        ];
+namespace App\Repository;
+
+class JoinTable{
+    private \PDO $connection;
+
+    public function __construct(\PDO $connection)
+    {
+        $this->connection = $connection;
     }
 
-    
-    private function generateLaporan(){
+    public function generateLaporan(){
       
         $sql = "SELECT
         p.`213049_menu_nama` AS nama_menu,
@@ -32,13 +29,10 @@ class GenerateLaporanModel extends \App\Core\MVC\Model {
     GROUP BY
         p.`213049_menu_nama`, m.`213049_menu_stok`, p.`213049_menu_harga`";
 
-        // Persiapkan statement
         $statement = $this->connection->prepare($sql);
         // Eksekusi statement
         $statement->execute();
 
-        // Ambil hasil query
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
-
 }

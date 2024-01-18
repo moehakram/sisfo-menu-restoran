@@ -1,25 +1,34 @@
 <?php
 
 namespace App\Controllers;
+
+use App\Core\Database\Database;
 use App\Core\MVC\{Controller, View};
+use App\Repository\JoinTable;
 
 class GenerateLaporanController extends Controller {
-    private $entrimodel;
 
-    public function __construct(){
-        parent::__construct();
-        $this->entrimodel = $this->model('GenerateLaporanModel');
-    }
     public function index() {
-        $data = $this->entrimodel->showData($this->user->name);
-        $html = View::renderView('admin/generate-laporan', $data);
-        // $this->response->setHeader('Content-Type: application/json; charset=UTF-8');
+        $data = (new JoinTable(Database::getConnection()))->generateLaporan();
+        $html = View::renderView('admin/generate-laporan', [
+            "title" => "Entri Referensi",
+            "user" => [
+                "name" => $this->user->name
+            ],
+            "laporan" => $data
+        ]);
         $this->response->setContent($html);
     }
+
     public function printLaporan() {
-        $data = $this->entrimodel->showData($this->user->name);
-        $html = View::renderViewOnly('admin/print-laporan', $data);
-        // $this->response->setHeader('Content-Type: application/json; charset=UTF-8');
+        $data = (new JoinTable(Database::getConnection()))->generateLaporan();
+        $html = View::renderViewOnly('admin/print-laporan', [
+            "title" => "Entri Referensi",
+            "user" => [
+                "name" => $this->user->name
+            ],
+            "laporan" => $data
+        ]);
         $this->response->setContent($html);
     }
 
