@@ -10,12 +10,7 @@ use App\Service\CustomerService;
 use App\Service\EntriTransaksiService;
 
 class EntriTransaksiController extends Controller {
-    private $entrimodel; 
 
-    public function __construct(){
-        parent::__construct();
-        $this->entrimodel = $this->model('EntriTransaksiModel');
-    }
     public function index() {
         $orderan = new OrderRepository(Database::getConnection());
         
