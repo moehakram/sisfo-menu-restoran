@@ -56,7 +56,7 @@ class PesananRepository
             $pesanan->jumlah = $pesananData['213049_jumlah'];
             $pesanan->idStatus = $pesananData['213049_idstatus'];
             $pesanan->idMenu = $pesananData['213049_idmenu'];
-            $pesanan->subtotal = $pesananData['213049_subtotal'];
+            $pesanan->subTotal = $pesananData['213049_subtotal'];
             $pesanan->menuNama = $pesananData['213049_menu_nama'];
             $pesanan->menuHarga = $pesananData['213049_menu_harga'];
     
@@ -65,15 +65,16 @@ class PesananRepository
     
         return $pesananList;
     }
-    public function getAllByIdOrder(int $idOrder)
+    public function getAllByIdOrder(int $idOrder, int $idstatus = 2)
     {
         $query = "SELECT 213049_id, 213049_idorder, 213049_jumlah, 
                           213049_idstatus, 213049_idmenu, 213049_subtotal, 
                           213049_menu_nama, 213049_menu_harga 
-                  FROM tbl_pesanan_213049 WHERE 213049_idorder = :idOrder AND 213049_idstatus = 2";
+                  FROM tbl_pesanan_213049 WHERE 213049_idorder = :idOrder AND 213049_idstatus = :idstatus";
         $stmt = $this->connection->prepare($query);
         $stmt->execute([
-            ':idOrder' => $idOrder
+            ':idOrder' => $idOrder,
+            ':idstatus' => $idstatus
     ]);
         $pesananDataList = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     
@@ -113,7 +114,7 @@ class PesananRepository
                 $pesanan->jumlah = $pesananData['213049_jumlah'];
                 $pesanan->idStatus = $pesananData['213049_idstatus'];
                 $pesanan->idMenu = $pesananData['213049_idmenu'];
-                $pesanan->subtotal = $pesananData['213049_subtotal'];
+                $pesanan->subTotal = $pesananData['213049_subtotal'];
                 $pesanan->menuNama = $pesananData['213049_menu_nama'];
                 $pesanan->menuHarga = $pesananData['213049_menu_harga'];
                 
@@ -142,12 +143,23 @@ class PesananRepository
             ':jumlah' => $pesanan->jumlah,
             ':idStatus' => $pesanan->idStatus,
             ':idMenu' => $pesanan->idMenu,
-            ':subtotal' => $pesanan->subtotal,
+            ':subtotal' => $pesanan->subTotal,
             ':menuNama' => $pesanan->menuNama,
             ':menuHarga' => $pesanan->menuHarga
         ]);
         
         return $pesanan;
+    }
+    public function updateStatusPesanan(int $idOrder)
+    {
+        $query = "UPDATE tbl_pesanan_213049 
+                  SET 213049_idstatus = 1
+                  WHERE 213049_idorder = :idOrder";
+        
+        $stmt = $this->connection->prepare($query);
+        $stmt->execute([
+            ':idOrder' => $idOrder
+        ]);
     }
 
     public function delete(int $pesananId): void

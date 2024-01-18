@@ -1,56 +1,101 @@
 <?php
 
 namespace App\Controllers;
+
+use App\Core\Database\Database;
 use App\Core\MVC\{Controller, View};
+use App\Models\TranxBayarOrderRequest;
+use App\Repository\OrderRepository;
+use App\Service\CustomerService;
+use App\Service\EntriTransaksiService;
 
 class EntriTransaksiController extends Controller {
-    private $entrimodel;
+    private $entrimodel; 
 
     public function __construct(){
         parent::__construct();
         $this->entrimodel = $this->model('EntriTransaksiModel');
     }
     public function index() {
-        $data = $this->entrimodel->showData($this->user->name);
-        $html = View::renderView('admin/entri-transaksi', $data);
+        $orderan = new OrderRepository(Database::getConnection());
+        
+        $html = View::renderView('admin/entri-transaksi', [
+            "title" => "Entri Referensi",
+            "user" => [
+                "name" => $this->user->name
+            ],
+            "tx_belumBayar" => $orderan->getByStatus(2),
+            "tx_terdahulu" => $orderan->getByStatus(1)
+        ]);
         $this->response->setContent($html);
     }
 
     public function search(){
-        $data = $this->entrimodel->fetchData($this->user->name, $this->request->post('keyword'));
-        $html = View::renderView('admin/entri-transaksi', $data);
+        $orderan = new OrderRepository(Database::getConnection());
+        $keysearch = $this->request->post('keyword');
+        $data = ($keysearch == "") ? $orderan->getByStatus(2) : $orderan->getByKey($keysearch);
+        $html = View::renderView('admin/entri-transaksi', [
+            "title" => "Entri Referensi",
+            "user" => [
+                "name" => $this->user->name
+            ],
+            "tx_belumBayar" => $data,
+            "tx_terdahulu" => $orderan->getByStatus(1)
+        ]);
         $this->response->setContent($html);
     }
 
     public function finalcheckout() {
-        $data = $this->entrimodel->showDataBayar($this->user, $this->request->get('id'));
-        $html = View::renderView('admin/final-checkout', $data);
+        $idorder = (int)$this->request->get('id');
+        $html = View::renderView('admin/final-checkout', [
+            "title" => "transaksi-bayar",
+            "user" => [
+                "name" => $this->user->name
+            ]
+        ] + (new CustomerService())->getCheckout($idorder));
         $this->response->setContent($html);
     }
     
     public function bayarOrder(){
-        $this->entrimodel->editorder($this->user, $this->request->post());
+        $request = new TranxBayarOrderRequest();
+        $request->id = $this->request->post('idorder');
+        $request->idAdmin = $this->user->id;
+        $request->idStatus = 1;
+        $request->namaAdmin = $this->user->name;
+        $request->uangBayar = $this->request->post('uang_bayar');
+        $request->uangKembali = $this->request->post('uang_kembali');      
+        $request->noMeja = $this->request->post('noMeja');   
+
+        $service = new EntriTransaksiService();
+        $service->editOrder($request);
     }
+
     public function hapusOrder(){
-        $respon = $this->entrimodel->hapusOrder($this->request->post('id'));
-        if($respon){
-            echo json_encode(["success" => "Data berhasil dihapus"]);
-        }else{
-            echo json_encode(["error" => "Data gagal dihapus"]);
-        }
+        
+        $service = new EntriTransaksiService();
+        $request = [
+            'idOrder' =>  $this->request->post('id'),
+            'noMeja' =>  $this->request->post('noMeja')
+        ];
+        $response = $service->hapusOrder($request);
+        
+        $this->response->setContent($response)->JSON();
     }
+
+
     public function statusSelesai(){
-        $respon = $this->entrimodel->hapusOrderFix($this->request->post('id'));
-        if($respon){
-            echo json_encode(["success" => "Data berhasil dihapus"]);
+        $response = new OrderRepository(Database::getConnection());
+        $response->updateStatus($this->request->post('id'));
+        if($response){
+            $this->response->setContent(["success" => "Data berhasil dihapus"])->JSON();
         }else{
-            echo json_encode(["error" => "Data gagal dihapus"]);
+            $this->response->setContent(["error" => "Data gagal dihapus"])->JSON();
         }
     }
     
-    public function viewInvoice(){
-        $data = $this->entrimodel->print($this->request->get('id'));
-        $html = View::renderViewOnly('print-invoice', $data);
+    public function viewInvoice(){ 
+        $idorder = $this->request->get('id');
+        $html = View::renderViewOnly('print-invoice', (new CustomerService())->getCheckout($idorder, 1));
         $this->response->setContent($html);
     }
 

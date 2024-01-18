@@ -79,11 +79,10 @@ class CustomerService
         }
     }
 
-    public function getCheckout($data){
-        $order = $this->orderRepository->getById($data['idOrder']);
-        $pesan = $this->pesananRepository->getAllByIdOrder($data['idOrder']);
+    public function getCheckout(int $idOrder, int $idstatus = 2){
+        $order = $this->orderRepository->getById($idOrder);
+        $pesan = $this->pesananRepository->getAllByIdOrder($idOrder, $idstatus);
 
         return ['order'=> $order, 'pesanan' => $pesan];
     }
-
 }

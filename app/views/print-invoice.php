@@ -126,8 +126,8 @@
         <div id="invoice" class="card-body">
             <!-- Informasi Pembeli -->
             <div id="buyer-info">
-                <h5>Nama Pembeli: <?= $_GET['nama'] ?></h5>
-                <h5>waktu pesan: <?= $data['transaksi'][0]['waktu_pesan'] ?></h5>
+                <h5>Nama Pembeli: <?= $data['order']->namaPengunjung ?></h5>
+                <h5>waktu pesan: <?= $data['order']->waktuPesan ?></h5>
             </div>
 
             <!-- Order Table -->
@@ -141,12 +141,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($data['transaksi'] as $pesanan) : ?>
+                    <?php foreach ($data['pesanan'] as $pesanan) : ?>
                     <tr class="text-center">
-                        <td><?= $pesanan['jumlah'] ?></td>
-                        <td><?= $pesanan['nama_menu'] ?></td>
-                        <td><?= formatRupiah($pesanan['harga_satuan']) ?></td>
-                        <td><?= formatRupiah($pesanan['sub_total']) ?></td>
+                        <td><?= $pesanan->jumlah ?></td>
+                        <td><?= $pesanan->menuNama ?></td>
+                        <td><?= formatRupiah($pesanan->menuHarga) ?></td>
+                        <td><?= formatRupiah($pesanan->subTotal) ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -154,12 +154,12 @@
                     <tr>
                         <th colspan="3">Total</th>
                         <td>
-                            <?= formatRupiah($data['transaksi'][0]['total']) ?>
+                            <?= formatRupiah($data['order']->totalHarga) ?>
                         </td>
                     </tr>
                     <tr>
                         <th colspan="3">Nomor Meja</th>
-                        <td><?= $data['transaksi'][0]['no_meja'] ?></td>
+                        <td><?= $data['order']->noMeja ?></td>
                     </tr>
                 </tfoot>
             </table>

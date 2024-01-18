@@ -41,17 +41,17 @@
                                         
                                         foreach($data['tx_belumBayar'] as $belumbayar): ?>
                                         <tr>
-                                            <td><?= $belumbayar['nom_meja'] ?></td>
-                                            <td><?= $belumbayar['pemesan'] ?></td>
-                                            <td><?= formatRupiah($belumbayar['total_harga']) ?></td>
+                                            <td><?= $belumbayar->noMeja ?></td>
+                                            <td><?= $belumbayar->namaPengunjung ?></td>
+                                            <td><?= formatRupiah($belumbayar->totalHarga) ?></td>
                                             <td><a role="button"
-                                                    href="/entri-transaksi/bayar?id=<?= $belumbayar['idorder']; ?>"><svg
+                                                    href="/entri-transaksi/bayar?id=<?= $belumbayar->id; ?>"><svg
                                                         xmlns="http://www.w3.org/2000/svg" width="26" height="26"
                                                         fill="blue" class="bi bi-pen-fill" viewBox="0 0 16 16">
                                                         <path
                                                             d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z" />
                                                     </svg></a>
-                                                <button class="hapus-order" data-id="<?= $belumbayar['idorder'];?>"><svg
+                                                <button class="hapus-order" data-id="<?= $belumbayar->id;?>"><svg
                                                         xmlns="http://www.w3.org/2000/svg" width="26" height="26"
                                                         fill="red" class="bi bi-trash3-fill" viewBox="0 0 16 16">
                                                         <path
@@ -89,13 +89,13 @@
                                         <?php $i=1; foreach($data['tx_terdahulu'] as $terdahulu): ?>
                                         <tr>
                                             <td><?= $i++ ?></td>
-                                            <td><?= $terdahulu['waktu_pesan'] ?></td>
-                                            <td><?= $terdahulu['pemesan'] ?></td>
-                                            <td><?= $terdahulu['nom_meja'] ?></td>
-                                            <td><?= formatRupiah($terdahulu['total_harga']) ?></td>
-                                            <td><a href="/entri-transaksi/invoice?id=<?= $terdahulu['idorder'] ?>&nama=<?= $terdahulu['pemesan'] ?>"
+                                            <td><?= $terdahulu->waktuPesan ?></td>
+                                            <td><?= $terdahulu->namaPengunjung ?></td>
+                                            <td><?= $terdahulu->noMeja ?></td>
+                                            <td><?= formatRupiah($terdahulu->totalHarga) ?></td>
+                                            <td><a href="/entri-transaksi/invoice?id=<?= $terdahulu->id ?>"
                                                     class="btn btn-success">Lihat Struk</a>
-                                                <button data-id="<?= $terdahulu['idorder'] ?>"
+                                                <button data-id="<?= $terdahulu->id ?>"
                                                     class="btn btn-danger hapus-orderFix">hapus</button></td>
                                         </tr>
 

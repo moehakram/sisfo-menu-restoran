@@ -25,6 +25,11 @@ class Response {
 
     public function setContent($content) {
         $this->content = $content;
+        return $this;
+    }
+
+    public function JSON() {
+        $this->content = json_encode($this->content);
     }
 
     public function getContent() {

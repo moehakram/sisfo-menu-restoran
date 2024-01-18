@@ -27,21 +27,21 @@
                             <?php $i=1; foreach($data['pesanan'] as $pesanan ) : ?>
                             <tr class="text-center">
                                 <td><?= $i++ ?></td>
-                                <td><?= $pesanan['nama_menu'] ?></td>
-                                <td><?= $pesanan['jumlah'] ?></td>
-                                <td><?= formatRupiah($pesanan['harga_satuan']) ?></td>
-                                <td><?= formatRupiah($pesanan['sub_total']) ?></td>
+                                <td><?= $pesanan->menuNama ?></td>
+                                <td><?= $pesanan->jumlah ?></td>
+                                <td><?= formatRupiah($pesanan->menuHarga) ?></td>
+                                <td><?= formatRupiah($pesanan->subTotal) ?></td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
                         <tfoot class="text-center">
                             <tr>
                                 <th colspan="4">Total Harga</th>
-                                <td id="totalHarga" data-id="<?= $_GET['id'] ?>" data-total="<?= $data['pesanan'][0]['total'] ?>"><?= formatRupiah($data['pesanan'][0]['total']) ?></td>
+                                <td id="totalHarga" data-id="<?= $_GET['id'] ?>" data-total="<?= $data['order']->totalHarga ?>"><?= formatRupiah($data['order']->totalHarga) ?></td>
                             </tr>
                             <tr>
                                 <th colspan="4">Nomor Meja</th>
-                                <td><?= $data['pesanan'][0]['no_meja'] ?></td>
+                                <td><?= $data['order']->noMeja ?></td>
                             </tr>
                         </tfoot>
                     </table>

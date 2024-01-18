@@ -84,7 +84,7 @@ class EntriOrderanController extends Controller{
     public function checkout(){
         $customerService = new CustomerService();
 
-        $response = $customerService->getCheckout(["nama" => $this->user->name, "idOrder" =>$this->request->get('id')]);
+        $response = $customerService->getCheckout($this->request->get('id'));
         $view = View::renderView('admin/checkout', [
             "title" => "Entri Order",
             "user" => [

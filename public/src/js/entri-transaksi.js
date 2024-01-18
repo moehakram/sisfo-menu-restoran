@@ -7,13 +7,13 @@ $(function() {
     $('#bayar').on('click', function(){
         let uangBayarValue = $("#uang_bayar").val();
         let kembalian = hitungKembalian();
-        
+        let nomorMeja = parseInt($("tfoot th:contains('Nomor Meja')").next().text());
     let idorder = $('#totalHarga').data('id');
         if(kembalian>=0){
             $.ajax({
                 type: "POST",
                 url: "/entri-transaksi/bayar",
-                data: { uang_bayar: uangBayarValue, uang_kembali: kembalian, idorder: idorder },
+                data: { uang_bayar: uangBayarValue, uang_kembali: kembalian, idorder: idorder, noMeja: nomorMeja },
                 success: function() {
                     window.location.href="/entri-transaksi";
                 }
@@ -24,8 +24,11 @@ $(function() {
     });
 
 
+
     $('.hapus-order').on('click', function () {
         let idOrder = $(this).data('id');
+        let nomorMeja = $(this).closest("tr").find("td:eq(0)").text();
+        
         Swal.fire({
             title: 'Kamu yakin ingin hapus?',
             // text: "You won't be able to revert this!",
@@ -39,7 +42,7 @@ $(function() {
                 $.ajax({
                     type: "POST",
                     url: "/entri-transaksi/hapus",
-                    data: {id : idOrder},
+                    data: {id : idOrder, noMeja: nomorMeja},
                     dataType: 'json',
                     success: function(response) {
                         if(response.error){
