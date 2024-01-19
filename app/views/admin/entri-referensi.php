@@ -49,9 +49,7 @@
                                        <button type="button" class="btn btn-warning tampilModalUbah"
                                            data-id="<?= $makanan->id; ?>" data-jenis="makanan" role="button"
                                            data-toggle="modal" data-target="#formModal">Edit</button>
-                                       <!-- <a class="btn btn-danger"
-                                           href="/entri-referensi/hapus?id=<?= $makanan->id; ?>" role="button">Hapus</a> -->
-                                       <button class="btn btn-danger hapus-menu" data-id="<?= $makanan->id; ?>">Hapus</button>
+                                       <button class="btn btn-danger hapus-menu" data-id="<?= $makanan->id; ?>" data-gbr="<?= $makanan->gambar; ?>">Hapus</button>
                                    </td>
                                </tr>
                                <?php endforeach;?>
@@ -103,9 +101,7 @@
                                        <button type="button" class="btn btn-warning tampilModalUbah"
                                            data-id="<?= $minuman->id; ?>" data-jenis="minuman" role="button"
                                            data-toggle="modal" data-target="#formModal">Edit</button>
-                                       <a class="btn btn-danger"
-                                           href="/entri-referensi/hapus?id=<?= $minuman->id; ?>&jenis=minuman"
-                                           role="button">Hapus</a>
+                                        <button class="btn btn-danger hapus-menu" data-id="<?= $minuman->id; ?>">Hapus</button>
                                    </td>
                                </tr>
                                <?php endforeach;?>

@@ -3,9 +3,8 @@ namespace App\Controllers;
 
 use App\Core\Database\Database;
 use App\Core\MVC\{Controller, View};
-use App\Repository\{MenuRepository, MejaRepository, OrderRepository};
+use App\Repository\{MenuRepository, MejaRepository};
 use App\Service\CustomerService;
-use App\Exception\ValidationException;
 
 class EntriOrderanController extends Controller{
 
@@ -32,14 +31,14 @@ class EntriOrderanController extends Controller{
     {
         $menuRepository = new MenuRepository(Database::getConnection());
         $dataMenu = $menuRepository->getById($this->request->post('id'));
-        $this->response->setContent(json_encode($dataMenu));
+        $this->response->setContent($dataMenu)->JSON();
     }
     
     public function getMeja()
     {
         // $this->updateMeja(5);
         $dataMeja = (new MejaRepository(Database::getConnection()))->getByStatus();
-        $this->response->setContent(json_encode($dataMeja));
+        $this->response->setContent($dataMeja)->JSON();
     }
 
     private function updateMeja($nomor)
@@ -78,7 +77,7 @@ class EntriOrderanController extends Controller{
         
         $customerService = new CustomerService();
         $response = $customerService->create($orderRequest, $pesananRequestList);     
-        $this->response->setContent(json_encode(['orderId' => $response->order->id]));
+        $this->response->setContent(['orderId' => $response->order->id])->JSON();
     }
 
     public function checkout(){

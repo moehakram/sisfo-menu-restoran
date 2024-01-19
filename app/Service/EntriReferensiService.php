@@ -83,7 +83,7 @@ class EntriReferensiService{
                throw new ValidationException('Ukuran file maksimum 2 MB.');
             }
 
-            $targetDirectory = UPLOAD ."entri-" . $tambahMenuRequest->jenis . '/';
+            $targetDirectory = UPLOAD .'entri-' . $tambahMenuRequest->jenis . '/';
             $targetFileName  = uniqid() . '_' . $tambahMenuRequest->nama. '.' .$file_ext;
             
             if(move_uploaded_file($image['tmp_name'], $targetDirectory . $targetFileName)) {
@@ -156,14 +156,26 @@ class EntriReferensiService{
                throw new ValidationException('Ukuran file maksimum 2 MB.');
             }
 
-            $targetDirectory = UPLOAD ."entri-". $editMenuRequest->jenis . '/';
+            $targetDirectory = UPLOAD .'entri-'. $editMenuRequest->jenis . '/';
             $targetFileName  = uniqid() . '_' . $editMenuRequest->nama. '.' .$file_ext;
             
             if(move_uploaded_file($image['tmp_name'], $targetDirectory . $targetFileName)) {
+                    $oldImagePath = $targetDirectory . $editMenuRequest->old_gambar;
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
                $editMenuRequest->gambar = $targetFileName;
             } else {
                 $editMenuRequest->gambar = null;
             }
-         
+    }
+
+    public function hapus($data)
+    {   
+        $this->menuRepository->delete($data['id']);
+        $oldImagePath = PUBLIK . $data['path_img'];
+        if (file_exists($oldImagePath)) {
+            unlink($oldImagePath);
+        }
     }
 }

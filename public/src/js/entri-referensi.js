@@ -18,11 +18,12 @@ $(function() {
         $('#modalTitle').html('Ubah Data');
         $('.modal-footer button[type=submit]').html('Ubah Data');
         $('.modal-body form').attr('action', '/entri-referensi/ubah');
-        
+        let imageUrl = ($(this).closest('tr').find('img').attr('src')).split('/');
+
         const id = $(this).data('id');
             $.ajax({
                 url: '/entri-referensi/getUbah',
-                data: {id : id},
+                data: {id : id, image : imageUrl[imageUrl.length-1]},
                 method: 'post',
                 dataType: 'json',
                 success: function(data) {
@@ -40,6 +41,7 @@ $(function() {
 
     $('.hapus-menu').on('click', function () {
         let idmenu = $(this).data('id');
+        let imageUrl = new URL($(this).closest('tr').find('img').attr('src')).pathname;
         Swal.fire({
             title: 'Kamu yakin ingin hapus?',
             icon: 'warning',
@@ -49,9 +51,30 @@ $(function() {
             confirmButtonText: 'Yes, hapus'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "/entri-referensi/hapus?id=" + idmenu;
+                $.ajax({
+                    type: 'POST',
+                    url: '/entri-referensi/hapus',
+                    data: { id: idmenu, image: decodeURIComponent(imageUrl) },
+                    success: function () {
+                        Swal.fire({
+                            title: 'Sukses!',
+                            text: 'Menu berhasil dihapus.',
+                            icon: 'success'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Terjadi kesalahan saat menghapus menu.',
+                            icon: 'error'
+                        });
+                    }
+                });
             }
-        })
+        });
     });
     
 

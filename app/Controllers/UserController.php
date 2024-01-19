@@ -2,11 +2,10 @@
 
 namespace App\Controllers;
 use App\Core\Database\Database;
-use App\Core\MVC\{Controller, View};
+use App\Core\MVC\Controller;
 use App\Repository\{SessionRepository, UserRepository};
 use App\Service\{SessionService, UserService};
 use App\Exception\ValidationException;
-use App\Domain\{User, Session};
 use App\Models\{UserRegisterRequest, UserLoginRequest, UserProfileUpdateRequest, UserPasswordUpdateRequest};
 
 class UserController extends Controller{

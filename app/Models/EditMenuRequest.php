@@ -10,4 +10,5 @@ class EditMenuRequest{
     public ?int $stok = null;
     public ?int $status = null;
     public $gambar = null;
+    public ?string $old_gambar = null;
 }

@@ -57,6 +57,7 @@ class EntriReferensiController extends Controller {
             $request->status = $this->request->post('status');
             $request->jenis = $this->request->post('jenis');
             $request->gambar = $this->request->files['gambar'];
+            $request->old_gambar = $this->request->post('image');
 
             try{
                 $service = new EntriReferensiService();
@@ -70,15 +71,17 @@ class EntriReferensiController extends Controller {
     public function getubah()
     {
         $menuRepository = new MenuRepository(Database::getConnection());
-        $data = $menuRepository->getById($_POST['id']);
-        echo json_encode($data);
+        $data = $menuRepository->getById($this->request->post('id'));
+        $this->response->setContent($data)->JSON();
     }
     
     public function hapus()
-    {   
-        $menuRepository = new MenuRepository(Database::getConnection());
-        $menuRepository->delete($_GET['id']);
-        $this->response->redirect('/entri-referensi');
+    {   $data = [
+        'id' => $this->request->post('id'),
+        'path_img' => $this->request->post('image')
+     ];
+        $service = new EntriReferensiService();
+        $service->hapus($data);
     }
 
 }

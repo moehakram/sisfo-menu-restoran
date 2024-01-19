@@ -12,18 +12,19 @@ use App\Repository\PesananRepository;
 class EntriTransaksiService{
     private PesananRepository $pesananRepository;
     private OrderRepository $orderRepository;
+    private MejaRepository $mejaRepository;
 
     public function __construct()
     {
         $connection = Database::getConnection();
         $this->pesananRepository = new PesananRepository($connection);
         $this->orderRepository = new OrderRepository($connection);
+        $this->mejaRepository = new MejaRepository($connection);
         
     }
 
     public function editOrder(TranxBayarOrderRequest $request) {
         try {
-            // Mulai transaksi
             Database::beginTransaction();
 
             $data = new Order();
@@ -40,11 +41,9 @@ class EntriTransaksiService{
             $meja->nomor = $data->noMeja;
             $meja->status = 1;
 
-            $updateStatusMeja = new MejaRepository(Database::getConnection());
-            $updateStatusMeja->update($meja);
+            $this->mejaRepository->update($meja);
 
-            $updateStatusPesanan = new PesananRepository(Database::getConnection());
-            $updateStatusPesanan->updateStatusPesanan($data->id);
+            $this->pesananRepository->updateStatusPesanan($data->id);
 
             Database::commitTransaction();
         } catch (\PDOException $e) {
@@ -55,15 +54,13 @@ class EntriTransaksiService{
     public function hapusOrder($data) {
         try {
             Database::beginTransaction();
-            $order = new OrderRepository(Database::getConnection());
-            $order->delete($data['idOrder']);
+            $this->orderRepository->delete($data['idOrder']);
 
             $meja = new Meja;
             $meja->nomor = $data['noMeja'];
             $meja->status = 1;
-            
-            $updateStatusMeja = new MejaRepository(Database::getConnection());
-            $updateStatusMeja->update($meja);
+
+            $this->mejaRepository->update($meja);
             
             Database::commitTransaction();
             return ["success" => "Data berhasil dihapus"];

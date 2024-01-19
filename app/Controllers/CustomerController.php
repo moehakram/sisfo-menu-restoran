@@ -5,8 +5,6 @@ use App\Core\Database\Database;
 use App\Core\MVC\{Controller, View};
 use App\Repository\{MenuRepository, MejaRepository, OrderRepository};
 use App\Service\CustomerService;
-use App\Exception\ValidationException;
-use App\Domain\Menu;
 
 class CustomerController extends Controller{
 
@@ -63,19 +61,19 @@ class CustomerController extends Controller{
     {
         $menuRepository = new MenuRepository(Database::getConnection());
         $dataMenu = $menuRepository->getById($this->request->post('id'));
-        $this->response->setContent(json_encode($dataMenu));
+        $this->response->setContent($dataMenu)->JSON();
     }
     
     public function getMeja()
     {
         $dataMeja = (new MejaRepository(Database::getConnection()))->getByStatus();
-        $this->response->setContent(json_encode($dataMeja));
+        $this->response->setContent($dataMeja)->JSON();
     }
    
     public function postCheckout() {
         $orderRepository = new OrderRepository(Database::getConnection());
         if ($orderRepository->hasOrderedBefore($this->user->id)) {
-            $this->response->setContent(json_encode(['error' => 'Maaf, Anda sudah memesan sebelumnya.']));
+            $this->response->setContent(['error' => 'Maaf, Anda sudah memesan sebelumnya.'])->JSON();
             return;
         }
 
@@ -102,7 +100,7 @@ class CustomerController extends Controller{
         
         $customerService = new CustomerService();
         $response = $customerService->create($orderRequest, $pesananRequestList);     
-        $this->response->setContent(json_encode(['orderId' => $response->order->id]));
+        $this->response->setContent(['orderId' => $response->order->id])->JSON();
     }
 
     public function checkout(){
