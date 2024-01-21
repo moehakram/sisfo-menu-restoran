@@ -2,11 +2,6 @@
    <div class="container px-2">
        <!-- Page Heading -->
        <h1 class="h3 mb-2 text-gray-800">Entri Referensi</h1>
-       <?php if(!empty($data['pesan'])): ?>
-               <div class="alert alert-warning" role="alert">
-                   <?= $data['pesan'] ?>
-               </div>
-            <?php endif ?>
 
        <!-- DataTales Example -->
        <div class="card shadow mb-4">
@@ -14,8 +9,7 @@
            <div class="card-header py-3">
                <h6 class="m-0 font-weight-bold text-primary">Referensi Makanan</h6>
                <!-- Button trigger modal -->
-               <button type="button" class="btn btn-primary tombolTambahData float-right mb-4 mr-4" data-toggle="modal"
-                   data-target="#formModal" data-jenis="makanan">
+               <button type="button" class="btn btn-primary tombolTambahData float-right mb-4 mr-4" data-jenis="makanan">
                    Tambah data
                </button>
              
@@ -47,8 +41,7 @@
                                    </td>
                                    <td class="grid grid-cols-2 gap-2">
                                        <button type="button" class="btn btn-warning tampilModalUbah"
-                                           data-id="<?= $makanan->id; ?>" data-jenis="makanan" role="button"
-                                           data-toggle="modal" data-target="#formModal">Edit</button>
+                                           data-id="<?= $makanan->id; ?>" data-jenis="makanan">Edit</button>
                                        <button class="btn btn-danger hapus-menu" data-id="<?= $makanan->id; ?>" data-gbr="<?= $makanan->gambar; ?>">Hapus</button>
                                    </td>
                                </tr>
@@ -66,8 +59,7 @@
            <div class="card-header py-3">
                <h6 class="m-0 font-weight-bold text-primary">Referensi Minuman</h6>
                <!-- Button trigger modal -->
-               <button type="button" class="btn btn-primary tombolTambahData float-right mb-4 mr-4" data-toggle="modal"
-                   data-target="#formModal" data-jenis="minuman">
+               <button type="button" class="btn btn-primary tombolTambahData float-right mb-4 mr-4" data-jenis="minuman">
                    Tambah data
                </button>
 
@@ -99,8 +91,7 @@
                                    </td>
                                    <td class="grid grid-cols-2 gap-2">
                                        <button type="button" class="btn btn-warning tampilModalUbah"
-                                           data-id="<?= $minuman->id; ?>" data-jenis="minuman" role="button"
-                                           data-toggle="modal" data-target="#formModal">Edit</button>
+                                           data-id="<?= $minuman->id; ?>" data-jenis="minuman">Edit</button>
                                         <button class="btn btn-danger hapus-menu" data-id="<?= $minuman->id; ?>">Hapus</button>
                                    </td>
                                </tr>

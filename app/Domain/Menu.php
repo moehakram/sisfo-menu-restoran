@@ -9,5 +9,5 @@ class Menu{
     public int $harga;
     public int $stok;
     public int $status;
-    public string $gambar;
+    public ?string $gambar;
 }

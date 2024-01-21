@@ -40,33 +40,33 @@ class EntriReferensiController extends Controller {
         try{
             $service = new EntriReferensiService();
             $response = $service->saveMenu($request);
-            $this->index($response);
-        }catch(ValidationException $e){
-            $this->index($e->getMessage());
+            $this->response->setContent($response)->JSON();
+        }catch(ValidationException $exception){
+            $this->response->setContent(['status' => 'gagal', 'pesan' => $exception->getMessage()])->JSON();
         }
     }
 
   
     public function editMenu() {
             
-            $request = new EditMenuRequest();
-            $request->id = $this->request->post('id');
-            $request->nama = $this->request->post('nama');
-            $request->harga = $this->request->post('harga');
-            $request->stok = $this->request->post('stok');
-            $request->status = $this->request->post('status');
-            $request->jenis = $this->request->post('jenis');
-            $request->gambar = $this->request->files['gambar'];
-            $request->old_gambar = $this->request->post('image');
-
-            try{
-                $service = new EntriReferensiService();
-                $response = $service->updateMenu($request);
-                $this->index($response);
-            }catch(ValidationException $e){
-                $this->index($e->getMessage());
-            }
+        $request = new EditMenuRequest();
+        $request->id = $this->request->post('id');
+        $request->nama = $this->request->post('nama');
+        $request->harga = $this->request->post('harga');
+        $request->stok = $this->request->post('stok');
+        $request->status = $this->request->post('status');
+        $request->jenis = $this->request->post('jenis');
+        $request->gambar = $this->request->files['gambar'];
+        $request->old_gambar = $this->request->post('oldImage');
+        
+        try{
+            $service = new EntriReferensiService();
+            $response = $service->updateMenu($request);
+            $this->response->setContent($response)->JSON();
+        }catch(ValidationException $exception){
+            $this->response->setContent(['status' => 'gagal', 'pesan' => $exception->getMessage()])->JSON();
         }
+    }
 
     public function getubah()
     {
@@ -78,10 +78,11 @@ class EntriReferensiController extends Controller {
     public function hapus()
     {   $data = [
         'id' => $this->request->post('id'),
-        'path_img' => $this->request->post('image')
+        'path_img' => $this->request->post('pathImage')
      ];
         $service = new EntriReferensiService();
-        $service->hapus($data);
+        $response = $service->hapus($data);
+        $this->response->setContent($response)->JSON();
     }
 
 }

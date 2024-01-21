@@ -10,35 +10,121 @@ $(function() {
         $('#jenis').val(jenis);
         $('#harga').val();
         $('#stok').val();
+        $('#formModal').modal('toggle');
     });
-   
+
+    let pathImg;
 
     $('.tampilModalUbah').on('click', function() {
+        pathImg = decodeURIComponent(new URL($(this).closest('tr').find('img').attr('src')).pathname);
+        pathImg = pathImg.substring(pathImg.lastIndexOf('/')+1);
         
         $('#modalTitle').html('Ubah Data');
         $('.modal-footer button[type=submit]').html('Ubah Data');
         $('.modal-body form').attr('action', '/entri-referensi/ubah');
-        let imageUrl = ($(this).closest('tr').find('img').attr('src')).split('/');
 
         const id = $(this).data('id');
-            $.ajax({
-                url: '/entri-referensi/getUbah',
-                data: {id : id, image : imageUrl[imageUrl.length-1]},
-                method: 'post',
-                dataType: 'json',
-                success: function(data) {
-                    $('#id').val(data['id']);           
-                    $('#nama').val(data['nama']);
-                    $('#jenis').val(data['jenis']);          
-                    $('#harga').val(data['harga']);
-                    $('#stok').val(data['stok']);
-                    $('#status').val(data['status']);
+        $.ajax({
+            url: '/entri-referensi/getUbah',
+            data: {id : id},
+            method: 'post',
+            dataType: 'json',
+            success: function(data) {
+                $('#id').val(data['id']);           
+                $('#nama').val(data['nama']);
+                $('#jenis').val(data['jenis']);          
+                $('#harga').val(data['harga']);
+                $('#stok').val(data['stok']);
+                $('#status').val(data['status']);
+                $('#formModal').modal('toggle');
             }
         });
             
     });
 
+    function tambahMenu() {
+        const formData = new FormData($('.modal-body form')[0]);        
+        $.ajax({
+            url: '/entri-referensi/tambahMenu',
+            method: 'post',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    Swal.fire({
+                        title: 'Sukses!',
+                        text: response.pesan,
+                        icon: 'success'
+                    }).then(() => {
+                        $('#formModal').modal('toggle');
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        text: response.pesan,
+                        icon: 'warning'
+                    })
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
 
+
+    function updateMenu() {
+        const formData = new FormData($('.modal-body form')[0]);
+        
+        formData.append('oldImage', pathImg);
+        
+        $.ajax({
+            url: '/entri-referensi/ubah',
+            method: 'post',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                console.info(response);
+                if (response.status === 'success') {
+                    Swal.fire({
+                        title: 'Sukses!',
+                        text: response.pesan,
+                        icon: 'success'
+                    }).then(() => {
+                        $('#formModal').modal('toggle');
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        text: response.pesan,
+                        icon: 'warning'
+                    })
+                }
+            },
+            error: function (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Terjadi kesalahan saat update menu.',
+                    icon: 'error'
+                });
+            }
+        });
+    }
+ 
+$('.modal-body form').submit(function(e) {
+    e.preventDefault();
+    if (typeof pathImg === 'undefined') {
+        tambahMenu();
+    } else {
+        updateMenu();
+    }
+});
+    
     $('.hapus-menu').on('click', function () {
         let idmenu = $(this).data('id');
         let imageUrl = new URL($(this).closest('tr').find('img').attr('src')).pathname;
@@ -52,14 +138,15 @@ $(function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    type: 'POST',
+                    method: 'POST',
                     url: '/entri-referensi/hapus',
-                    data: { id: idmenu, image: decodeURIComponent(imageUrl) },
-                    success: function () {
+                    data: { id: idmenu, pathImage: decodeURIComponent(imageUrl) },
+                    dataType: 'json',                    
+                    success: function (respon) {
                         Swal.fire({
-                            title: 'Sukses!',
-                            text: 'Menu berhasil dihapus.',
-                            icon: 'success'
+                            title: respon.status + '!',
+                            text: respon.pesan,
+                            icon: respon.status
                         }).then(() => {
                             location.reload();
                         });
@@ -76,8 +163,4 @@ $(function() {
             }
         });
     });
-    
-
-  
-
 });
