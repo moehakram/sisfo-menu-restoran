@@ -14,6 +14,6 @@ define('ROUTER', ROOT . 'router/');
 
 define('BASE_URL', "https://localhost:8080/");
 
-define('SRC_UPLOAD', 'http://localhost:8080/upload/');
-define('SRC_PUBLIC', 'http://localhost:8080/');
+define('SRC_UPLOAD', 'https://localhost:8080/upload/');
+define('SRC_PUBLIC', 'https://localhost:8080/');
 
