@@ -68,8 +68,12 @@ $(function() {
                     })
                 }
             },
-            error: function(error) {
-                console.log(error);
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Terjadi kesalahan saat tambah menu.',
+                    icon: 'error'
+                });
             }
         });
     }

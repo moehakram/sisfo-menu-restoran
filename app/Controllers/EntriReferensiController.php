@@ -39,9 +39,11 @@ class EntriReferensiController extends Controller {
         
         try{
             $service = new EntriReferensiService();
-            $response = $service->saveMenu($request);
+            $response = $service->saveMenu($request);    
+            // header('HTTP/1.1 200 OK');
             $this->response->setContent($response)->JSON();
         }catch(ValidationException $exception){
+            // header('HTTP/1.1 500 Internal Server Error');
             $this->response->setContent(['status' => 'gagal', 'pesan' => $exception->getMessage()])->JSON();
         }
     }
@@ -62,6 +64,7 @@ class EntriReferensiController extends Controller {
         try{
             $service = new EntriReferensiService();
             $response = $service->updateMenu($request);
+            
             $this->response->setContent($response)->JSON();
         }catch(ValidationException $exception){
             $this->response->setContent(['status' => 'gagal', 'pesan' => $exception->getMessage()])->JSON();
