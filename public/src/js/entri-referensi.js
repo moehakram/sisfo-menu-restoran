@@ -88,14 +88,13 @@ $(function() {
             contentType: false,
             dataType: 'json',
             success: function(response) {
-                console.info(response);
                 if (response.status === 'success') {
+                    $('#formModal').modal('toggle');
                     Swal.fire({
                         title: 'Sukses!',
                         text: response.pesan,
                         icon: 'success'
                     }).then(() => {
-                        $('#formModal').modal('toggle');
                         location.reload();
                     });
                 } else {
@@ -105,8 +104,7 @@ $(function() {
                     })
                 }
             },
-            error: function (error) {
-                console.error('Error:', error);
+            error: function () {
                 Swal.fire({
                     title: 'Error!',
                     text: 'Terjadi kesalahan saat update menu.',
@@ -151,8 +149,7 @@ $('.modal-body form').submit(function(e) {
                             location.reload();
                         });
                     },
-                    error: function (error) {
-                        console.error('Error:', error);
+                    error: function () {
                         Swal.fire({
                             title: 'Error!',
                             text: 'Terjadi kesalahan saat menghapus menu.',
