@@ -160,13 +160,13 @@ class EntriReferensiService
     {
         try{
             Database::beginTransaction();
-            $oldImagePath = PUBLIK . $data['path_img'];
+            $oldImagePath = PUBLIK . trim($data['path_img'], '/');
             $this->menuRepository->delete($data['id']);
             
             if(!unlink($oldImagePath)) throw new \Exception();
             
             Database::commitTransaction();
-            return ['status' => 'success', 'pesan' => 'Data berhasil di hapus'];
+            return ['status' => 'success', 'pesan' => 'Data berhasil di hapus '. $oldImagePath];
         }catch(\Exception $e){
             Database::rollbackTransaction();
             return ['status' => 'error', 'pesan' => 'Data gagal di hapus'];

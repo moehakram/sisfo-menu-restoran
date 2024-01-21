@@ -53,12 +53,12 @@ $(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.status === 'success') {
+                    $('#formModal').modal('toggle');
                     Swal.fire({
                         title: 'Sukses!',
                         text: response.pesan,
                         icon: 'success'
                     }).then(() => {
-                        $('#formModal').modal('toggle');
                         location.reload();
                     });
                 } else {
