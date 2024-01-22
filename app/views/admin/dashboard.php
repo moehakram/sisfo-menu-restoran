@@ -726,7 +726,7 @@
 <div class="continer mx-4">
     <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
       <div class="container-fluid">
-        <h2 class="mb-5 text-white">Reservasi Restoran</h2>
+        <h2 class="mb-5 text-white">PEMESANAN MENU</h2>
         <div class="header-body">
           <div class="row">
             <div class="col-xl-3 col-lg-6">
