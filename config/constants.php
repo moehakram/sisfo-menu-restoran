@@ -1,11 +1,7 @@
 <?php
 
-
-$authority = 'www.localhost:8080';
-
-
 // Define base URL
-define('BASE_URL', "http://$authority/");
+define('BASE_URL', "http://www.localhost:8080/");
 
 // Define Path app
 define('ROOT', str_replace('\\', '/', rtrim(__DIR__, '/')) . '/../');
