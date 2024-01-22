@@ -124,7 +124,7 @@
 
         <div class="container">
             <div class="copyright">
-                &copy; Copyright <strong><span>FOODHUNT</span></strong>.RISALDY HUSAINI
+                &copy; Copyright <strong><span>FOODHUNT</span></strong>.MUH. AKRAM
             </div>
         </div>
         </div>
