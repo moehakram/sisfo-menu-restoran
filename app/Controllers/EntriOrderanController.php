@@ -10,8 +10,8 @@ class EntriOrderanController extends Controller{
 
     public function index() {
             $menuRepository = new MenuRepository(Database::getConnection());
-            $dataMakanan = $menuRepository->getByJenis('Makanan');
-            $dataMinuman = $menuRepository->getByJenis('Minuman');
+            $dataMakanan = $menuRepository->getByStatus('Makanan', 1);
+            $dataMinuman = $menuRepository->getByStatus('Minuman', 1);
             $dataMeja = (new MejaRepository(Database::getConnection()))->getAll();
 
             $view = View::renderView('admin/entri-order', [
@@ -40,16 +40,6 @@ class EntriOrderanController extends Controller{
         $dataMeja = (new MejaRepository(Database::getConnection()))->getByStatus();
         $this->response->setContent($dataMeja)->JSON();
     }
-
-    private function updateMeja($nomor)
-    {
-        $dataMeja = (new MejaRepository(Database::getConnection()));
-        $meja = new \App\Domain\Meja();
-        $meja->nomor = $nomor;
-        $meja->status = 1;
-        $dataMeja->update($meja);
-    }
-
 
     
     public function postCheckout() {

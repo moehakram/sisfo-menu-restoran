@@ -109,6 +109,33 @@ class MenuRepository
     
         return $menuList;
     }
+    public function getByStatus(string $jenis, int $status = 1)
+    {
+        $query = "SELECT 213049_id, 213049_menu_nama, 213049_menu_jenis, 213049_menu_harga, 213049_menu_stok, 213049_idstatus, 213049_menu_gambar FROM tbl_menu_213049 WHERE 213049_menu_jenis = :jenis AND 213049_idstatus = :idstatus";
+        $stmt = $this->connection->prepare($query);
+        $stmt->execute([
+            ':jenis' => $jenis,
+            ':idstatus' => $status
+        ]);
+
+        $menuDataList = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    
+        $menuList = [];
+        foreach ($menuDataList as $menuData) {
+            $menu = new Menu();
+            $menu->id = $menuData['213049_id'];
+            $menu->nama = $menuData['213049_menu_nama'];
+            $menu->jenis = $menuData['213049_menu_jenis'];
+            $menu->harga = $menuData['213049_menu_harga'];
+            $menu->stok = $menuData['213049_menu_stok'];
+            $menu->status = $menuData['213049_idstatus'];
+            $menu->gambar = $menuData['213049_menu_gambar'];
+    
+            $menuList[] = $menu;
+        }
+    
+        return $menuList;
+    }
     
     public function update(Menu $menu): Menu
     {

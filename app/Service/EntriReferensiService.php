@@ -166,7 +166,7 @@ class EntriReferensiService
             if(!unlink($oldImagePath)) throw new \Exception();
             
             Database::commitTransaction();
-            return ['status' => 'success', 'pesan' => 'Data berhasil di hapus '. $oldImagePath];
+            return ['status' => 'success', 'pesan' => 'Data berhasil di hapus '];
         }catch(\Exception $e){
             Database::rollbackTransaction();
             return ['status' => 'error', 'pesan' => 'Data gagal di hapus'];

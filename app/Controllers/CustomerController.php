@@ -11,8 +11,8 @@ class CustomerController extends Controller{
     public function index() {
         if($this->user == null){
             $menuRepository = new MenuRepository(Database::getConnection());
-            $dataMakanan = $menuRepository->getByJenis('Makanan');
-            $dataMinuman = $menuRepository->getByJenis('Minuman');
+            $dataMakanan = $menuRepository->getByStatus('Makanan', 1);
+            $dataMinuman = $menuRepository->getByStatus('Minuman', 1);
             $view = View::renderViewOnly('index', [
                 "title" => "Login Management",
                 "makanan" => $dataMakanan,
@@ -39,8 +39,8 @@ class CustomerController extends Controller{
         
         $menuRepository = new MenuRepository(Database::getConnection());
 
-        $dataMakanan = $menuRepository->getByJenis('Makanan');
-        $dataMinuman = $menuRepository->getByJenis('Minuman');
+        $dataMakanan = $menuRepository->getByStatus('Makanan', 1);
+        $dataMinuman = $menuRepository->getByStatus('Minuman', 1);
         $html = View::renderView("pelanggan/$view", [
             "title" => "Restoran FOOD-HUNT",
             "user" => [
