@@ -19,7 +19,7 @@ class Router
         $this->method = strtoupper($method);
         $this->response = $response;
     }
-    
+
 
     public function get($pattern, $callback, $options = [])
     {
@@ -54,7 +54,7 @@ class Router
         $routeMatcher = new RouteMatcher($this->method, $this->url, $this->router);
         $matchRouter = $routeMatcher->getMatchingRoutes();
 
-        if ($matchRouter==null) {
+        if ($matchRouter == null) {
             // $this->response->setContent("Route tidak ditemukan !");
             $this->sendNotFound();
         } else {
@@ -63,10 +63,10 @@ class Router
         }
     }
 
-    private function executeRoute($route, $params=[])
+    private function executeRoute($route, $params = [])
     {
         $middleware = $route->getMiddleware();
-        if(!is_null($middleware)) $middleware->before();
+        if (!is_null($middleware)) $middleware->before();
         $controller = $route->getController();
         $action = $route->getAction();
 
@@ -79,25 +79,25 @@ class Router
 
     private function runController($controller, $method)
     {
-        $controllerFile = ROOT . str_replace('\\', '/', $controller) . '.php';    
-        if (file_exists($controllerFile) && class_exists($controller)) {
+        if (class_exists($controller)) {
             $controller = new $controller();
             if (method_exists($controller, $method)) {
                 $controller->$method();
             } else {
-                // $this->response->setContent("Method tidak ada");
-                $this->sendNotFound();
+                $this->response->setContent("Method tidak ada");
+                // $this->sendNotFound();
             }
         } else {
-            // $this->response->setContent("File atau Controller Class tidak ada");
-            $this->sendNotFound();
+            $this->response->setContent("File atau Controller Class tidak ada");
+            // $this->sendNotFound();
         }
     }
 
-    private function sendNotFound() {
-		// $this->response->setContent("Maaf Route tidak ditemukan !");
+    private function sendNotFound()
+    {
+        // $this->response->setContent("Maaf Route tidak ditemukan !");
         $this->response->redirect('/');
-	}
+    }
 
     public function cleanUrl($url)
     {

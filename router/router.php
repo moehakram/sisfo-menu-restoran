@@ -56,6 +56,6 @@ $router->get("/generate-laporan/print", "GenerateLaporanController@printLaporan"
 
 
 
-$router->get('/:name', function() {
+$router->get('/:name', function () {
     $GLOBALS['response']->redirect("/");
 });

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Core\Database\Database;
@@ -6,10 +7,16 @@ use App\Core\MVC\{Controller, View};
 use App\Repository\{MenuRepository, MejaRepository, OrderRepository};
 use App\Service\CustomerService;
 
-class CustomerController extends Controller{
+class CustomerController extends Controller
+{
 
-    public function index() {
-        if($this->user == null){
+    public function index()
+    {
+
+        // $this->response->setContent('halo');
+        // return;
+        // die('tes');
+        if ($this->user == null) {
             $menuRepository = new MenuRepository(Database::getConnection());
             $dataMakanan = $menuRepository->getByStatus('Makanan', 1);
             $dataMinuman = $menuRepository->getByStatus('Minuman', 1);
@@ -19,9 +26,9 @@ class CustomerController extends Controller{
                 "minuman" => $dataMinuman
             ]);
             $this->response->setContent($view);
-        }else{
-            if($this->user->level !== 1) $this->response->redirect('/home');
-            
+        } else {
+            if ($this->user->level !== 1) $this->response->redirect('/home');
+
             $view = View::renderView('admin/dashboard', [
                 "title" => "Dashboard",
                 "user" => [
@@ -35,8 +42,9 @@ class CustomerController extends Controller{
         }
     }
 
-    public function home($view = 'index') {
-        
+    public function home($view = 'index')
+    {
+
         $menuRepository = new MenuRepository(Database::getConnection());
 
         $dataMakanan = $menuRepository->getByStatus('Makanan', 1);
@@ -53,7 +61,8 @@ class CustomerController extends Controller{
         $this->response->setContent($html);
     }
 
-    public function pesanMenu(){
+    public function pesanMenu()
+    {
         $this->home('pesan-menu');
     }
 
@@ -63,14 +72,15 @@ class CustomerController extends Controller{
         $dataMenu = $menuRepository->getById($this->request->post('id'));
         $this->response->setContent($dataMenu)->JSON();
     }
-    
+
     public function getMeja()
     {
         $dataMeja = (new MejaRepository(Database::getConnection()))->getByStatus();
         $this->response->setContent($dataMeja)->JSON();
     }
-   
-    public function postCheckout() {
+
+    public function postCheckout()
+    {
         $orderRepository = new OrderRepository(Database::getConnection());
         if ($orderRepository->hasOrderedBefore($this->user->id)) {
             $this->response->setContent(['error' => 'Maaf, Anda sudah memesan sebelumnya.'])->JSON();
@@ -84,9 +94,9 @@ class CustomerController extends Controller{
         $orderRequest->totalHarga = $this->request->post('total_harga');
         $orderRequest->idStatus = 2;
         $orderRequest->namaPengunjung = $this->user->name;
-        
+
         $pesananRequestList = [];
-        foreach($this->request->post('menu_pesan') as $menu){
+        foreach ($this->request->post('menu_pesan') as $menu) {
             $pesananRequest = $this->model('UserDataPesanRequest');
             $pesananRequest->jumlah = $menu['jumlah'];
             $pesananRequest->idStatus = 2;
@@ -96,14 +106,15 @@ class CustomerController extends Controller{
             $pesananRequest->menuHarga = $menu['harga'];
             $pesananRequestList[] = $pesananRequest;
         }
-        
-        
+
+
         $customerService = new CustomerService();
-        $response = $customerService->create($orderRequest, $pesananRequestList);     
+        $response = $customerService->create($orderRequest, $pesananRequestList);
         $this->response->setContent(['orderId' => $response->order->id])->JSON();
     }
 
-    public function checkout(){
+    public function checkout()
+    {
         $customerService = new CustomerService();
 
         $response = $customerService->getCheckout($this->request->get('id'));
@@ -112,9 +123,8 @@ class CustomerController extends Controller{
             "user" => [
                 "name" => $this->user->name
             ]
-        ]+$response);
+        ] + $response);
 
         $this->response->setContent($view);
     }
-
 }
